@@ -19,7 +19,7 @@ html,body{
   color:#fff;
 }
 
-/* uçan kalpler */
+/* kalpler */
 canvas{
   position:fixed;
   inset:0;
@@ -27,7 +27,7 @@ canvas{
   z-index:1;
 }
 
-/* merkez kart */
+/* kart */
 .card{
   position:relative;
   z-index:2;
@@ -92,22 +92,24 @@ button{
 <div class="card" id="box">
   <h1>🤍</h1>
   <p>
-    Eğer bunu okuyorsan…  
-    tam şu anda  
-    seni düşündüğümü bil.
+    Bu sayfayı açtıysan…  
+    demek ki tam şu anda  
+    aklımdasın.
     <br><br>
     Devamı için  
-    <b>sadece ikimizin bildiği</b>  
-    o şeyi yaz.
+    <b>ilk tanıştığımız günü</b>  
+    yazmanı istiyorum.
   </p>
 
-  <input id="x" placeholder="🤍">
+  <input id="x" placeholder="GG.AA.YYYY">
   <button onclick="go()">Devam et</button>
 </div>
 
 <script>
-/* === BURAYI KENDİNE GÖRE DOLDUR === */
-const SECRET = "1402";   // evlilik tarihi, lakap, özel sayı
+/* ===================== */
+/*  SADECE BURAYI AYARLA */
+/* ===================== */
+const SECRET = "14.02.2018"; // ilk tanışma tarihi
 
 const MESSAGE = `
 Bugün 14 Şubat…
@@ -116,14 +118,14 @@ Ama benim için
 senin varlığın
 bir güne sığmıyor.
 
-Yanımdayken dünya daha yumuşak,
+Yanımdayken dünya daha sakin,
 yokken bile içimde bir yer
 “tamam” diyor.
 
 Seni sevmek,
 her gün yeniden seçmek gibi.
-Sessizce.
-Tereddütsüz.
+Hiç zorlanmadan.
+Hiç tereddüt etmeden.
 
 İyi ki karımsın.
 İyi ki benim hayatımsın.
@@ -131,7 +133,9 @@ Tereddütsüz.
 🤍
 `;
 
-/* === AKIŞ === */
+/* ===================== */
+/*        AKIŞ           */
+/* ===================== */
 function go(){
   const v = document.getElementById("x").value.trim();
   if(v === SECRET){
@@ -144,7 +148,9 @@ function go(){
   }
 }
 
-/* === UÇAN BEYAZ KALPLER === */
+/* ===================== */
+/*   GERÇEK KALPLER ❤️   */
+/* ===================== */
 const canvas = document.getElementById("c");
 const ctx = canvas.getContext("2d");
 let w,h;
@@ -161,10 +167,18 @@ function spawn(){
   hearts.push({
     x:Math.random()*w,
     y:h+30,
-    s:10+Math.random()*20,
-    v:0.6+Math.random()*1.4,
-    a:0.25+Math.random()*0.45
+    s:10+Math.random()*16,
+    v:0.6+Math.random()*1.2,
+    a:0.25+Math.random()*0.5
   });
+}
+
+function drawHeart(x, y, s){
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.bezierCurveTo(x - s, y - s, x - s*1.5, y + s*0.5, x, y + s*1.4);
+  ctx.bezierCurveTo(x + s*1.5, y + s*0.5, x + s, y - s, x, y);
+  ctx.fill();
 }
 
 function loop(){
@@ -174,9 +188,7 @@ function loop(){
     o.y -= o.v;
     ctx.globalAlpha = o.a;
     ctx.fillStyle = "#fff";
-    ctx.beginPath();
-    ctx.arc(o.x,o.y,o.s,0,Math.PI*2);
-    ctx.fill();
+    drawHeart(o.x, o.y, o.s);
   });
   hearts = hearts.filter(o=>o.y>-60);
   requestAnimationFrame(loop);
