@@ -1,19 +1,20 @@
 <!doctype html>
 <html lang="tr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>🤍</title>
 
 <style>
 :root{
-  --bgA:#20000d;
-  --bgB:#7a002a;
-  --bgC:#b1003a;
-  --glass: rgba(255,255,255,.14);
-  --ink:#ffffff;
-  --accent:#7a002a;
+  --bg1:#2a0010;
+  --bg2:#7a002a;
+  --bg3:#b1003a;
+  --glass:rgba(255,255,255,.14);
+  --ink:#fff;
 }
+
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
@@ -25,143 +26,134 @@ html,body{
   background:#120007;
 }
 
-/* premium animated background */
+/* Background */
 .bg{
-  position:fixed; inset:-40px;
+  position:fixed;
+  inset:-40px;
   background:
-    radial-gradient(900px 600px at 18% 22%, rgba(255,255,255,.10), transparent 62%),
-    radial-gradient(900px 700px at 82% 30%, rgba(255,255,255,.06), transparent 62%),
-    linear-gradient(120deg, var(--bgA), var(--bgB), var(--bgC), var(--bgB));
+    radial-gradient(900px 600px at 20% 20%, rgba(255,255,255,.10), transparent 60%),
+    radial-gradient(900px 700px at 80% 30%, rgba(255,255,255,.08), transparent 60%),
+    linear-gradient(120deg,var(--bg1),var(--bg2),var(--bg3),var(--bg2));
   background-size:260% 260%;
-  animation: drift 18s ease-in-out infinite;
+  animation:bgMove 18s ease-in-out infinite;
   z-index:0;
 }
-@keyframes drift{
+@keyframes bgMove{
   0%{background-position:10% 20%}
   50%{background-position:90% 70%}
   100%{background-position:10% 20%}
 }
 
 .vignette{
-  position:fixed; inset:0;
+  position:fixed;
+  inset:0;
   background:
-    radial-gradient(circle at 50% 35%, rgba(255,255,255,.08), transparent 55%),
-    radial-gradient(circle at 50% 70%, rgba(0,0,0,.35), transparent 55%),
-    radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,.55) 100%);
+    radial-gradient(circle at 50% 40%, rgba(255,255,255,.08), transparent 55%),
+    radial-gradient(circle at 50% 75%, rgba(0,0,0,.4), transparent 55%),
+    radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,.6) 100%);
   z-index:1;
   pointer-events:none;
 }
 
-/* hearts */
+/* Hearts */
 canvas{
   position:fixed;
   inset:0;
-  pointer-events:none;
   z-index:2;
+  pointer-events:none;
 }
 
+/* Layout */
 .wrap{
   position:relative;
   z-index:4;
-  width:min(460px, calc(100vw - 34px));
-  margin: 10vh auto 0;
+  width:min(460px,calc(100vw - 32px));
+  margin:10vh auto 0;
 }
 
-/* card */
 .card{
-  position:relative;
-  border-radius:30px;
-  padding:34px 28px 38px;
   background:var(--glass);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  box-shadow:0 45px 110px rgba(0,0,0,.52);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-radius:30px;
+  padding:34px 28px 42px;
+  box-shadow:0 40px 100px rgba(0,0,0,.55);
   text-align:center;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-
-  animation: enter .9s cubic-bezier(.2,.9,.2,1);
+  animation:enter .8s ease;
 }
 @keyframes enter{
-  from{opacity:0; transform: translateY(16px) scale(.985)}
-  to{opacity:1; transform: translateY(0) scale(1)}
+  from{opacity:0;transform:translateY(16px) scale(.98)}
+  to{opacity:1;transform:none}
 }
 
 .card.vanish{
-  animation: vanish .6s ease forwards;
+  animation:vanish .6s ease forwards;
 }
 @keyframes vanish{
-  to{opacity:0; transform: translateY(-10px) scale(.965); filter: blur(6px)}
+  to{opacity:0;transform:translateY(-12px) scale(.96);filter:blur(6px)}
 }
 
 h1{
   margin:0 0 14px;
   font-size:20px;
-  font-weight:750;
 }
 
 p{
   margin:0;
   font-size:14px;
   line-height:1.8;
-  opacity:.96;
 }
 
 .highlight{
-  width:100%;
   margin:18px 0 10px;
   padding:12px 14px;
   border-radius:16px;
-  background: rgba(255,255,255,.90);
-  color: var(--accent);
-  font-size:15px;
+  background:#fff;
+  color:#7a002a;
   font-weight:800;
 }
 
 input{
   width:100%;
-  margin-top:18px;
   padding:15px;
+  margin-top:18px;
   border-radius:18px;
   border:none;
   font-size:16px;
   text-align:center;
-  outline:none;
 }
 
 button{
   width:100%;
-  margin-top:16px;
   padding:15px;
+  margin-top:16px;
   border-radius:18px;
   border:none;
-  background:#fff;
-  color: var(--accent);
   font-size:16px;
   font-weight:800;
+  background:#fff;
+  color:#7a002a;
 }
 
+/* FINAL TEXT */
 .final{
   white-space:pre-line;
   font-size:15px;
   line-height:1.95;
+  padding-bottom:60px; /* 🔴 KRİTİK: kaybolma fix */
 }
 
-/* photo reveal */
+/* Photo */
 .photo-wrap{
-  margin-top:28px;
+  margin-top:26px;
   opacity:0;
-  transform: translateY(20px);
-  transition: all 1.2s ease;
+  transform:translateY(20px);
+  transition:all 1.2s ease;
 }
-
 .photo-wrap.show{
   opacity:1;
-  transform: translateY(0);
+  transform:none;
 }
-
 .photo-wrap img{
   width:100%;
   display:block;
@@ -179,14 +171,10 @@ button{
 <div class="wrap">
   <div class="card" id="box">
     <h1>🤍</h1>
-    <p>
-      Bu sayfayı açtıysan…<br>
-      demek ki tam şu anda<br>
-      aklımdasın.
-    </p>
+    <p>Bu sayfayı açtıysan…<br>demek ki tam şu anda aklımdasın.</p>
 
     <div class="highlight">Evlendiğimiz tarihi yazmanı istiyorum</div>
-    <input id="x" placeholder="GGAAYYYY" inputmode="numeric" autocomplete="off">
+    <input id="x" placeholder="GG.AA.YYYY">
     <button onclick="go()">Devam et</button>
   </div>
 
@@ -196,146 +184,95 @@ button{
 </div>
 
 <script>
-/* ===== AYAR ===== */
-const SECRET = "15052022";
-const PHOTO_SRC = "IMG_6603_Original.jpeg";
-
-const LINES = [
-  "Bugün 14 Şubat…",
-  "",
-  "Ama benim için",
-  "senin varlığın",
-  "bir güne sığmıyor.",
-  "",
-  "Yanımdayken dünya daha sakin,",
-  "yokken bile içimde bir yer",
-  "“tamam” diyor.",
-  "",
-  "Seni sevmek,",
-  "her gün yeniden seçmek gibi.",
-  "Hiç zorlanmadan.",
-  "Hiç tereddüt etmeden.",
-  "",
-  "İyi ki karımsın.",
-  "İyi ki benim hayatımsın.",
-  "",
-  "Hatırlıyor musun?"
+const SECRET="15.05.2022";
+const LINES=[
+"Bugün 14 Şubat…",
+"",
+"Ama benim için",
+"senin varlığın",
+"bir güne sığmıyor.",
+"",
+"Yanımdayken dünya daha sakin,",
+"yokken bile içimde bir yer",
+"“tamam” diyor.",
+"",
+"Seni sevmek,",
+"her gün yeniden seçmek gibi.",
+"Hiç zorlanmadan.",
+"Hiç tereddüt etmeden.",
+"",
+"İyi ki karımsın.",
+"İyi ki benim hayatımsın.",
+"",
+"Hatırlıyor musun?",
+"",
+""
 ];
 
-document.querySelector("#photo img").src = PHOTO_SRC;
-
-/* ===== AKIŞ ===== */
 function go(){
-  const v = document.getElementById("x").value.trim();
-  if(v === SECRET){
-    const box = document.getElementById("box");
-    const photo = document.getElementById("photo");
+  const v=document.getElementById("x").value.trim();
+  if(v!==SECRET){document.getElementById("x").value="";return;}
+  const box=document.getElementById("box");
+  const photo=document.getElementById("photo");
+  photo.classList.remove("show");
+  box.classList.add("vanish");
 
-    // her tetiklemede foto önce gizli
-    photo.classList.remove("show");
-
-    box.classList.add("vanish");
-    setTimeout(()=>{
-      box.classList.remove("vanish");
-      box.innerHTML = `<h1>🤍</h1><div class="final" id="final"></div>`;
-
-      // ✅ Metin tamamen bitince foto gelsin
-      typeLines("final", LINES, 22, () => {
-        setTimeout(()=> photo.classList.add("show"), 600);
-      });
-
-    }, 650);
-
-  }else{
-    const inp = document.getElementById("x");
-    inp.value = "";
-    inp.placeholder = "Bir daha dene 🤍";
-  }
+  setTimeout(()=>{
+    box.classList.remove("vanish");
+    box.innerHTML='<h1>🤍</h1><div class="final" id="final"></div>';
+    typeLines("final",LINES,22,()=>setTimeout(()=>photo.classList.add("show"),1200));
+  },650);
 }
 
-/* ✅ Typewriter: bittiğinde callback çalıştırır */
-function typeLines(id, lines, speed, done){
-  const el = document.getElementById(id);
-  let i=0, j=0;
-
+function typeLines(id,lines,speed,done){
+  const el=document.getElementById(id);
+  let i=0,j=0;
   function tick(){
-    if(i >= lines.length){
-      if(typeof done === "function") done();
-      return;
-    }
-
-    const line = lines[i];
-
-    if(line === "" && j===0){
-      el.textContent += "\n";
-      i++; j=0;
-      return setTimeout(tick, 150);
-    }
-
-    el.textContent += line[j] || "";
+    if(i>=lines.length){done&&done();return;}
+    const line=lines[i];
+    if(line===""&&j===0){el.textContent+="\n";i++;return setTimeout(tick,150);}
+    el.textContent+=line[j]||"";
     j++;
-
-    if(j >= line.length){
-      el.textContent += "\n";
-      i++; j=0;
-      return setTimeout(tick, 240);
-    }
-
-    setTimeout(tick, speed);
+    if(j>=line.length){el.textContent+="\n";i++;j=0;return setTimeout(tick,240);}
+    setTimeout(tick,speed);
   }
   tick();
 }
 
-/* ===== KALPLER ===== */
-const canvas = document.getElementById("c");
-const ctx = canvas.getContext("2d");
-let w,h;
-
-function resize(){
-  w = canvas.width = innerWidth;
-  h = canvas.height = innerHeight;
-}
-resize();
-addEventListener("resize", resize);
-
+/* Hearts */
+const canvas=document.getElementById("c"),ctx=canvas.getContext("2d");
+let w,h;function r(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;}
+r();addEventListener("resize",r);
 let hearts=[];
 function spawn(){
-  const big = Math.random() > 0.92;
   hearts.push({
     x:Math.random()*w,
     y:h+30,
-    s:(big?18:10)+Math.random()*(big?16:12),
-    v:(big?0.35:0.55)+Math.random()*(big?0.9:1.2),
-    a:0.18+Math.random()*0.55,
-    drift:(Math.random()-0.5)*(big?0.45:0.65)
+    s:12+Math.random()*22,
+    v:.4+Math.random()*1.2,
+    a:.2+Math.random()*.5,
+    d:(Math.random()-.5)*.6
   });
 }
-
-function drawHeart(x,y,s){
+function draw(x,y,s){
   ctx.beginPath();
   ctx.moveTo(x,y);
-  ctx.bezierCurveTo(x-s,y-s, x-s*1.5,y+s*0.5, x,y+s*1.4);
-  ctx.bezierCurveTo(x+s*1.5,y+s*0.5, x+s,y-s, x,y);
+  ctx.bezierCurveTo(x-s,y-s,x-s*1.5,y+s*.5,x,y+s*1.4);
+  ctx.bezierCurveTo(x+s*1.5,y+s*.5,x+s,y-s,x,y);
   ctx.fill();
 }
-
-function loop(){
+(function loop(){
   ctx.clearRect(0,0,w,h);
-  if(Math.random()>0.84) spawn();
-
+  if(Math.random()>.85)spawn();
   hearts.forEach(o=>{
-    o.y -= o.v;
-    o.x += o.drift;
-    ctx.globalAlpha = o.a;
-    ctx.fillStyle = "#fff";
-    drawHeart(o.x,o.y,o.s);
+    o.y-=o.v;o.x+=o.d;
+    ctx.globalAlpha=o.a;
+    ctx.fillStyle="#fff";
+    draw(o.x,o.y,o.s);
   });
-
-  hearts = hearts.filter(o=>o.y>-90 && o.x>-120 && o.x<w+120);
+  hearts=hearts.filter(o=>o.y>-100);
   requestAnimationFrame(loop);
-}
-loop();
+})();
 </script>
-
 </body>
 </html>
