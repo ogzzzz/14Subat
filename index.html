@@ -2,189 +2,258 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>🤍</title>
 
 <style>
 *{box-sizing:border-box}
 html,body{
-  margin:0;
-  width:100%;
-  height:100%;
+  margin:0;width:100%;height:100%;overflow:hidden;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
-  background:#1a0010;
-  color:#fff;
+  background:#120007;color:#fff;
 }
 
-.center{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
+/* BACKGROUND */
+.bg{
+  position:fixed;inset:-40px;z-index:0;
+  background:
+    radial-gradient(900px 600px at 20% 20%, rgba(255,255,255,.10), transparent 60%),
+    radial-gradient(900px 700px at 80% 30%, rgba(255,255,255,.08), transparent 60%),
+    linear-gradient(120deg,#2a0010,#7a002a,#b1003a,#7a002a);
+  background-size:260% 260%;
+  animation:bg 18s ease-in-out infinite;
+}
+@keyframes bg{
+  0%{background-position:10% 20%}
+  50%{background-position:90% 70%}
+  100%{background-position:10% 20%}
+}
+.vignette{
+  position:fixed;inset:0;z-index:1;
+  background:radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,.65) 100%);
 }
 
+/* HEARTS */
+canvas{position:fixed;inset:0;z-index:2;pointer-events:none}
+
+/* CARD */
+.stage{
+  position:fixed;inset:0;z-index:4;
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;
+}
 .card{
-  width:100%;
-  max-width:420px;
-  background:rgba(255,255,255,.15);
-  border-radius:24px;
-  padding:28px 24px 32px;
+  width:100%;max-width:460px;
+  background:rgba(255,255,255,.14);
+  backdrop-filter:blur(18px);
+  border-radius:30px;
+  padding:36px 28px 44px;
+  box-shadow:0 40px 100px rgba(0,0,0,.55);
   text-align:center;
 }
+.card.fade{animation:fade .6s ease forwards}
+@keyframes fade{to{opacity:0;transform:scale(.96);filter:blur(6px)}}
 
-h1{margin:0 0 12px;font-size:20px}
-p{font-size:14px;line-height:1.8}
-
-input,button{
-  width:100%;
-  margin-top:16px;
-  padding:14px;
-  border:none;
+h1{margin:0 0 14px;font-size:20px}
+p{margin:0;font-size:14px;line-height:1.8}
+.highlight{
+  margin:18px 0 10px;
+  padding:12px 14px;
   border-radius:16px;
-  font-size:16px;
-  text-align:center;
+  background:#fff;color:#7a002a;
+  font-weight:800;
 }
-
-button{
-  background:#fff;
-  color:#7a002a;
-  font-weight:700;
-  cursor:pointer;
+input,button{
+  width:100%;border:none;border-radius:18px;
+  padding:15px;font-size:16px;text-align:center;
 }
+input{margin-top:18px}
+button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
 
-.final{
-  white-space:pre-line;
-  font-size:15px;
-  line-height:1.9;
-}
+.final{white-space:pre-line;font-size:15px;line-height:1.95}
 
+/* PHOTO */
 .photo{
-  display:none;
-  margin-top:24px;
+  position:fixed;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:min(480px,92vw);
+  opacity:0;z-index:5;
+  transition:opacity 1.2s ease;
 }
+.photo.show{opacity:1}
 .photo img{
-  width:100%;
-  border-radius:20px;
-  filter:blur(16px);
-  transition:filter 1s ease;
+  width:100%;border-radius:26px;
+  box-shadow:0 40px 120px rgba(0,0,0,.55);
+  transition:filter 1.2s ease, transform 1.2s ease;
+}
+/* 🔥 BLUR ARTTI */
+.photo img.blurred{
+  filter: blur(18px) brightness(.85);
 }
 .photo img.clear{
-  filter:blur(0);
+  filter:blur(0) brightness(1);
+  transform:scale(1.02);
 }
 
+/* BOTTOM SHEET */
 .sheet{
-  display:none;
-  margin-top:16px;
+  position:fixed;
+  left:50%;
+  bottom:env(safe-area-inset-bottom,20px);
+  transform:translateX(-50%) translateY(120%);
+  width:min(520px,92vw);
+  z-index:6;
+  opacity:0;
+  transition:.7s cubic-bezier(.2,.9,.2,1);
 }
-.sheet input{
-  margin-top:12px;
+.sheet.show{
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
+.sheetInner{
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(18px);
+  border-radius:24px;
+  padding:14px 16px 18px;
+  text-align:center;
+}
+.sheetInner b{display:block;margin-bottom:10px}
+.sheetInner input{
+  border-radius:18px;padding:14px;width:100%;
+  border:none;font-size:16px;text-align:center;
 }
 
+/* ✅ FINAL CAM PILL */
 .after{
-  display:none;
-  margin-top:20px;
-  padding:12px 16px;
-  background:rgba(255,255,255,.18);
+  position:fixed;
+  left:50%;top:calc(50% + 38vh);
+  transform:translateX(-50%);
+  z-index:7;
+  opacity:0;
+  transition:opacity 1s ease;
+
+  padding:14px 22px;
   border-radius:999px;
-  font-size:14px;
-  font-weight:600;
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 18px 60px rgba(0,0,0,.45);
+
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:.2px;
 }
+.after.show{opacity:1}
 </style>
 </head>
 
 <body>
+<div class="bg"></div>
+<div class="vignette"></div>
+<canvas id="c"></canvas>
 
-<div class="center">
+<div class="stage">
   <div class="card" id="card">
     <h1>🤍</h1>
-    <p>Evlendiğimiz tarihi yazmanı istiyorum</p>
+    <p>Bu sayfayı açtıysan…<br>demek ki tam şu anda aklımdasın.</p>
+    <div class="highlight">Evlendiğimiz tarihi yazmanı istiyorum</div>
     <input id="d1" placeholder="GGAAYYYY">
-    <button id="btn">Devam et</button>
+    <button onclick="first()">Devam et</button>
   </div>
 </div>
 
-<script>
-const DATE = "15052022";
-const CAR  = "poloş";
+<div class="photo" id="photo">
+  <img id="photoImg" src="IMG_6603_Original.jpeg" class="blurred">
+</div>
 
-const MESSAGE = [
-"Bugün 14 Şubat…",
-"",
-"Ama benim için",
-"senin varlığın",
-"bir güne sığmıyor.",
-"",
-"Yanımdayken dünya daha sakin,",
-"yokken bile içimde bir yer",
-"“tamam” diyor.",
-"",
-"Seni sevmek,",
-"her gün yeniden seçmek gibi.",
-"",
-"İyi ki karımsın.",
-"İyi ki benim hayatımsın."
-];
-
-const card = document.getElementById("card");
-const btn  = document.getElementById("btn");
-const d1   = document.getElementById("d1");
-
-btn.onclick = () => {
-  if(d1.value.trim() !== DATE) return;
-
-  card.innerHTML = `<div class="final" id="final"></div>
-  <div class="photo" id="photo">
-    <img id="photoImg" src="IMG_6603_Original.jpeg">
-  </div>
-  <div class="sheet" id="sheet">
-    <p>İlk arabana ne isim vermiştik?</p>
+<div class="sheet" id="sheet">
+  <div class="sheetInner">
+    <b>İlk arabana ne isim vermiştik?</b>
     <input id="d2">
   </div>
-  <div class="after" id="after">🤍 Bunu bilen biriyle evlendim.</div>`;
+</div>
 
-  type(document.getElementById("final"), MESSAGE, 24, () => {
-    setTimeout(() => {
-      const photo = document.getElementById("photo");
-      photo.style.display = "block";
+<div class="after" id="after">Bunu bilen biriyle evlendim.</div>
 
-      setTimeout(() => {
-        document.getElementById("sheet").style.display = "block";
-      }, 800);
-    }, 6000);
-  });
-};
+<script>
+const DATE="15052022";
+const CAR="poloş";
+const PHOTO_DELAY=6000;
 
-function type(el, arr, speed, done){
+const LINES=[
+"Bugün 14 Şubat…","",
+"Ama benim için","senin varlığın","bir güne sığmıyor.","",
+"Yanımdayken dünya daha sakin,",
+"yokken bile içimde bir yer","“tamam” diyor.","",
+"Seni sevmek,",
+"her gün yeniden seçmek gibi.",
+"Hiç zorlanmadan.",
+"Hiç tereddüt etmeden.","",
+"İyi ki karımsın.",
+"İyi ki benim hayatımsın.","",
+"Hatırlıyor musun?"
+];
+
+function first(){
+  if(d1.value.trim()!==DATE) return;
+  card.classList.add("fade");
+  setTimeout(()=>{
+    card.innerHTML='<h1>🤍</h1><div class="final" id="final"></div>';
+    type(final,LINES,22,()=>{
+      setTimeout(()=>{
+        photo.classList.add("show");
+        setTimeout(()=>sheet.classList.add("show"),800);
+      },PHOTO_DELAY);
+    });
+  },600);
+}
+
+d2.addEventListener("input",()=>{
+  if(d2.value.trim().toLowerCase()===CAR){
+    sheet.classList.remove("show");
+    photoImg.classList.remove("blurred");
+    photoImg.classList.add("clear");
+    setTimeout(()=>after.classList.add("show"),600);
+  }
+});
+
+function type(el,arr,s,done){
   let i=0,j=0;
   (function t(){
     if(i>=arr.length){done();return;}
-    const line = arr[i];
-    if(line==="" && j===0){
-      el.textContent += "\n";
-      i++; return setTimeout(t,150);
-    }
-    el.textContent += line[j] || "";
-    j++;
-    if(j>=line.length){
-      el.textContent += "\n";
-      i++; j=0;
-      return setTimeout(t,220);
-    }
-    setTimeout(t,speed);
+    let l=arr[i];
+    if(l===""&&j===0){el.textContent+="\n";i++;return setTimeout(t,140);}
+    el.textContent+=l[j]||"";j++;
+    if(j>=l.length){el.textContent+="\n";i++;j=0;return setTimeout(t,220);}
+    setTimeout(t,s);
   })();
 }
 
-document.addEventListener("input",e=>{
-  if(e.target.id==="d2"){
-    if(e.target.value.trim().toLowerCase()===CAR){
-      document.getElementById("photoImg").classList.add("clear");
-      document.getElementById("sheet").style.display="none";
-      document.getElementById("after").style.display="inline-block";
-    }
-  }
-});
+/* HEARTS */
+const canvas=document.getElementById("c"),ctx=canvas.getContext("2d");
+let w,h;function r(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+r();addEventListener("resize",r);
+let hs=[];
+function spawn(){hs.push({x:Math.random()*w,y:h+30,s:12+Math.random()*20,v:.5+Math.random(),a:.3+Math.random()*.4})}
+function draw(x,y,s){
+  ctx.beginPath();
+  ctx.moveTo(x,y);
+  ctx.bezierCurveTo(x-s,y-s,x-s*1.5,y+s*.5,x,y+s*1.4);
+  ctx.bezierCurveTo(x+s*1.5,y+s*.5,x+s,y-s,x,y);
+  ctx.fill();
+}
+(function loop(){
+  ctx.clearRect(0,0,w,h);
+  if(Math.random()>.85)spawn();
+  hs.forEach(o=>{
+    o.y-=o.v;
+    ctx.globalAlpha=o.a;ctx.fillStyle="#fff";
+    draw(o.x,o.y,o.s);
+  });
+  hs=hs.filter(o=>o.y>-80);
+  requestAnimationFrame(loop);
+})();
 </script>
-
 </body>
 </html>
