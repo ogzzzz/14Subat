@@ -13,39 +13,42 @@ html,body{
   overflow:hidden;
   font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
   background:
-    radial-gradient(900px 600px at 20% 20%, rgba(255,255,255,.08), transparent 60%),
+    radial-gradient(900px 600px at 20% 20%, rgba(255,255,255,.10), transparent 60%),
     radial-gradient(800px 600px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
     linear-gradient(180deg, #2a0011, #7a002a);
   color:#fff;
 }
 
+/* uçan kalpler */
 canvas{
   position:fixed;
   inset:0;
   pointer-events:none;
+  z-index:1;
 }
 
+/* merkez kart */
 .card{
   position:relative;
   z-index:2;
-  max-width:420px;
+  max-width:440px;
   margin:12vh auto;
-  padding:32px 26px;
-  border-radius:26px;
-  background:rgba(255,255,255,.14);
-  backdrop-filter: blur(16px);
-  box-shadow:0 40px 90px rgba(0,0,0,.45);
+  padding:34px 28px;
+  border-radius:28px;
+  background:rgba(255,255,255,.16);
+  backdrop-filter: blur(18px);
+  box-shadow:0 40px 100px rgba(0,0,0,.45);
   text-align:center;
   animation:fade .8s ease;
 }
 
 @keyframes fade{
-  from{opacity:0; transform:translateY(12px)}
+  from{opacity:0; transform:translateY(14px)}
   to{opacity:1}
 }
 
 h1{
-  margin:0 0 14px;
+  margin:0 0 16px;
   font-size:20px;
   font-weight:700;
 }
@@ -53,15 +56,15 @@ h1{
 p{
   margin:0;
   font-size:14px;
-  line-height:1.7;
-  opacity:.95;
+  line-height:1.75;
+  opacity:.96;
 }
 
 input{
   width:100%;
-  margin-top:22px;
-  padding:14px;
-  border-radius:16px;
+  margin-top:24px;
+  padding:15px;
+  border-radius:18px;
   border:none;
   font-size:16px;
   text-align:center;
@@ -70,9 +73,9 @@ input{
 
 button{
   width:100%;
-  margin-top:16px;
-  padding:14px;
-  border-radius:16px;
+  margin-top:18px;
+  padding:15px;
+  border-radius:18px;
   border:none;
   background:#fff;
   color:#7a002a;
@@ -89,13 +92,13 @@ button{
 <div class="card" id="box">
   <h1>🤍</h1>
   <p>
-    Bu sayfayı açtıysan…  
-    demek ki tam şu anda  
-    aklımdasın.
+    Eğer bunu okuyorsan…  
+    tam şu anda  
+    seni düşündüğümü bil.
     <br><br>
     Devamı için  
-    <b>sadece bize ait</b>  
-    olan şeyi yazmanı istiyorum.
+    <b>sadece ikimizin bildiği</b>  
+    o şeyi yaz.
   </p>
 
   <input id="x" placeholder="🤍">
@@ -103,7 +106,8 @@ button{
 </div>
 
 <script>
-const SECRET = "1402";
+/* === BURAYI KENDİNE GÖRE DOLDUR === */
+const SECRET = "1402";   // evlilik tarihi, lakap, özel sayı
 
 const MESSAGE = `
 Bugün 14 Şubat…
@@ -112,14 +116,14 @@ Ama benim için
 senin varlığın
 bir güne sığmıyor.
 
-Yanımdayken her şey daha sakin,
+Yanımdayken dünya daha yumuşak,
 yokken bile içimde bir yer
 “tamam” diyor.
 
 Seni sevmek,
 her gün yeniden seçmek gibi.
-Hiç zorlanmadan.
-Hiç tereddüt etmeden.
+Sessizce.
+Tereddütsüz.
 
 İyi ki karımsın.
 İyi ki benim hayatımsın.
@@ -127,41 +131,45 @@ Hiç tereddüt etmeden.
 🤍
 `;
 
+/* === AKIŞ === */
 function go(){
   const v = document.getElementById("x").value.trim();
   if(v === SECRET){
     document.getElementById("box").innerHTML =
       `<h1>🤍</h1><p style="white-space:pre-line">${MESSAGE}</p>`;
-    burst(50);
+    burst(60);
   }else{
     document.getElementById("x").value="";
     document.getElementById("x").placeholder="Bir daha dene 🤍";
   }
 }
 
-/* floating hearts */
+/* === UÇAN BEYAZ KALPLER === */
 const canvas = document.getElementById("c");
 const ctx = canvas.getContext("2d");
 let w,h;
+
 function resize(){
   w = canvas.width = innerWidth;
   h = canvas.height = innerHeight;
 }
-resize(); addEventListener("resize",resize);
+resize();
+addEventListener("resize",resize);
 
 let hearts=[];
 function spawn(){
   hearts.push({
     x:Math.random()*w,
-    y:h+20,
-    s:8+Math.random()*18,
-    v:0.6+Math.random()*1.2,
-    a:0.2+Math.random()*0.4
+    y:h+30,
+    s:10+Math.random()*20,
+    v:0.6+Math.random()*1.4,
+    a:0.25+Math.random()*0.45
   });
 }
+
 function loop(){
   ctx.clearRect(0,0,w,h);
-  if(Math.random()>0.85) spawn();
+  if(Math.random()>0.82) spawn();
   hearts.forEach(o=>{
     o.y -= o.v;
     ctx.globalAlpha = o.a;
@@ -170,7 +178,7 @@ function loop(){
     ctx.arc(o.x,o.y,o.s,0,Math.PI*2);
     ctx.fill();
   });
-  hearts = hearts.filter(o=>o.y>-40);
+  hearts = hearts.filter(o=>o.y>-60);
   requestAnimationFrame(loop);
 }
 loop();
