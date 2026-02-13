@@ -26,10 +26,9 @@ html,body{
   background:#120007;
 }
 
-/* Background */
+/* BACKGROUND */
 .bg{
-  position:fixed;
-  inset:-40px;
+  position:fixed; inset:-40px;
   background:
     radial-gradient(900px 600px at 20% 20%, rgba(255,255,255,.10), transparent 60%),
     radial-gradient(900px 700px at 80% 30%, rgba(255,255,255,.08), transparent 60%),
@@ -45,38 +44,41 @@ html,body{
 }
 
 .vignette{
-  position:fixed;
-  inset:0;
+  position:fixed; inset:0;
   background:
     radial-gradient(circle at 50% 40%, rgba(255,255,255,.08), transparent 55%),
     radial-gradient(circle at 50% 75%, rgba(0,0,0,.4), transparent 55%),
     radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,.6) 100%);
   z-index:1;
-  pointer-events:none;
 }
 
-/* Hearts */
+/* HEARTS */
 canvas{
+  position:fixed; inset:0;
+  pointer-events:none;
+  z-index:2;
+}
+
+/* CENTER STAGE */
+.stage{
   position:fixed;
   inset:0;
-  z-index:2;
-  pointer-events:none;
-}
-
-/* Layout */
-.wrap{
-  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   z-index:4;
-  width:min(460px,calc(100vw - 32px));
-  margin:10vh auto 0;
+  padding:16px;
 }
 
+/* CARD */
 .card{
+  width:100%;
+  max-width:460px;
   background:var(--glass);
   backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
   border-radius:30px;
-  padding:34px 28px 42px;
+  padding:36px 28px 44px;
   box-shadow:0 40px 100px rgba(0,0,0,.55);
   text-align:center;
   animation:enter .8s ease;
@@ -86,23 +88,15 @@ canvas{
   to{opacity:1;transform:none}
 }
 
-.card.vanish{
-  animation:vanish .6s ease forwards;
+.card.fadeOut{
+  animation:fadeOut .6s ease forwards;
 }
-@keyframes vanish{
-  to{opacity:0;transform:translateY(-12px) scale(.96);filter:blur(6px)}
-}
-
-h1{
-  margin:0 0 14px;
-  font-size:20px;
+@keyframes fadeOut{
+  to{opacity:0;transform:scale(.96);filter:blur(6px)}
 }
 
-p{
-  margin:0;
-  font-size:14px;
-  line-height:1.8;
-}
+h1{margin:0 0 14px;font-size:20px}
+p{margin:0;font-size:14px;line-height:1.8}
 
 .highlight{
   margin:18px 0 10px;
@@ -140,23 +134,26 @@ button{
   white-space:pre-line;
   font-size:15px;
   line-height:1.95;
-  padding-bottom:60px; /* 🔴 KRİTİK: kaybolma fix */
+  padding-bottom:20px;
 }
 
-/* Photo */
-.photo-wrap{
-  margin-top:26px;
+/* PHOTO */
+.photo{
+  position:fixed;
+  bottom:6vh;
+  left:50%;
+  transform:translate(-50%,30px);
+  width:min(460px,90vw);
   opacity:0;
-  transform:translateY(20px);
-  transition:all 1.2s ease;
+  transition:opacity 1.2s ease, transform 1.2s ease;
+  z-index:5;
 }
-.photo-wrap.show{
+.photo.show{
   opacity:1;
-  transform:none;
+  transform:translate(-50%,0);
 }
-.photo-wrap img{
+.photo img{
   width:100%;
-  display:block;
   border-radius:22px;
   box-shadow:0 30px 80px rgba(0,0,0,.45);
 }
@@ -168,8 +165,8 @@ button{
 <div class="vignette"></div>
 <canvas id="c"></canvas>
 
-<div class="wrap">
-  <div class="card" id="box">
+<div class="stage">
+  <div class="card" id="card">
     <h1>🤍</h1>
     <p>Bu sayfayı açtıysan…<br>demek ki tam şu anda aklımdasın.</p>
 
@@ -177,10 +174,10 @@ button{
     <input id="x" placeholder="GG.AA.YYYY">
     <button onclick="go()">Devam et</button>
   </div>
+</div>
 
-  <div class="photo-wrap" id="photo">
-    <img src="IMG_6603_Original.jpeg" alt="🤍">
-  </div>
+<div class="photo" id="photo">
+  <img src="IMG_6603_Original.jpeg">
 </div>
 
 <script>
@@ -204,55 +201,49 @@ const LINES=[
 "İyi ki karımsın.",
 "İyi ki benim hayatımsın.",
 "",
-"Hatırlıyor musun?",
-"",
-""
+"Hatırlıyor musun?"
 ];
 
 function go(){
-  const v=document.getElementById("x").value.trim();
-  if(v!==SECRET){document.getElementById("x").value="";return;}
-  const box=document.getElementById("box");
+  if(document.getElementById("x").value.trim()!==SECRET) return;
+  const card=document.getElementById("card");
   const photo=document.getElementById("photo");
-  photo.classList.remove("show");
-  box.classList.add("vanish");
+
+  card.classList.add("fadeOut");
 
   setTimeout(()=>{
-    box.classList.remove("vanish");
-    box.innerHTML='<h1>🤍</h1><div class="final" id="final"></div>';
-    typeLines("final",LINES,22,()=>setTimeout(()=>photo.classList.add("show"),1200));
+    card.classList.remove("fadeOut");
+    card.innerHTML='<h1>🤍</h1><div class="final" id="final"></div>';
+    typeLines("final",LINES,24,()=>{
+      setTimeout(()=>{
+        photo.classList.add("show");
+        photo.getBoundingClientRect(); // iOS repaint fix
+      },1200);
+    });
   },650);
 }
 
 function typeLines(id,lines,speed,done){
   const el=document.getElementById(id);
   let i=0,j=0;
-  function tick(){
+  (function t(){
     if(i>=lines.length){done&&done();return;}
     const line=lines[i];
-    if(line===""&&j===0){el.textContent+="\n";i++;return setTimeout(tick,150);}
+    if(line===""&&j===0){el.textContent+="\n";i++;return setTimeout(t,160);}
     el.textContent+=line[j]||"";
     j++;
-    if(j>=line.length){el.textContent+="\n";i++;j=0;return setTimeout(tick,240);}
-    setTimeout(tick,speed);
-  }
-  tick();
+    if(j>=line.length){el.textContent+="\n";i++;j=0;return setTimeout(t,260);}
+    setTimeout(t,speed);
+  })();
 }
 
-/* Hearts */
+/* HEARTS */
 const canvas=document.getElementById("c"),ctx=canvas.getContext("2d");
 let w,h;function r(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;}
 r();addEventListener("resize",r);
 let hearts=[];
 function spawn(){
-  hearts.push({
-    x:Math.random()*w,
-    y:h+30,
-    s:12+Math.random()*22,
-    v:.4+Math.random()*1.2,
-    a:.2+Math.random()*.5,
-    d:(Math.random()-.5)*.6
-  });
+  hearts.push({x:Math.random()*w,y:h+30,s:12+Math.random()*22,v:.5+Math.random(),a:.25+Math.random()*.4,d:(Math.random()-.5)*.6});
 }
 function draw(x,y,s){
   ctx.beginPath();
@@ -263,7 +254,7 @@ function draw(x,y,s){
 }
 (function loop(){
   ctx.clearRect(0,0,w,h);
-  if(Math.random()>.85)spawn();
+  if(Math.random()>.84)spawn();
   hearts.forEach(o=>{
     o.y-=o.v;o.x+=o.d;
     ctx.globalAlpha=o.a;
