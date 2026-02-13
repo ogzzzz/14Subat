@@ -2,235 +2,189 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>🤍</title>
 
 <style>
 *{box-sizing:border-box}
 html,body{
-  margin:0;width:100%;height:100%;overflow:hidden;
+  margin:0;
+  width:100%;
+  height:100%;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
-  background:#120007;color:#fff;
+  background:#1a0010;
+  color:#fff;
 }
 
-/* BACKGROUND */
-.bg{
-  position:fixed;inset:-40px;z-index:0;
-  background:
-    radial-gradient(900px 600px at 20% 20%, rgba(255,255,255,.10), transparent 60%),
-    radial-gradient(900px 700px at 80% 30%, rgba(255,255,255,.08), transparent 60%),
-    linear-gradient(120deg,#2a0010,#7a002a,#b1003a,#7a002a);
-  background-size:260% 260%;
-  animation:bg 18s ease-in-out infinite;
-  pointer-events:none;
-}
-@keyframes bg{
-  0%{background-position:10% 20%}
-  50%{background-position:90% 70%}
-  100%{background-position:10% 20%}
-}
-.vignette{
-  position:fixed;inset:0;z-index:1;
-  background:radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,.65) 100%);
-  pointer-events:none;
+.center{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
 }
 
-/* HEARTS */
-canvas{position:fixed;inset:0;z-index:2;pointer-events:none}
-
-/* CARD */
-.stage{
-  position:fixed;inset:0;z-index:4;
-  display:flex;align-items:center;justify-content:center;
-  padding:16px;
-}
 .card{
-  width:100%;max-width:460px;
-  background:rgba(255,255,255,.14);
-  backdrop-filter:blur(18px);
-  border-radius:30px;
-  padding:36px 28px 44px;
-  box-shadow:0 40px 100px rgba(0,0,0,.55);
+  width:100%;
+  max-width:420px;
+  background:rgba(255,255,255,.15);
+  border-radius:24px;
+  padding:28px 24px 32px;
   text-align:center;
 }
-.card.fade{animation:fade .6s ease forwards}
-@keyframes fade{to{opacity:0;transform:scale(.96);filter:blur(6px)}}
 
-h1{margin:0 0 14px;font-size:20px}
-p{margin:0;font-size:14px;line-height:1.8}
-.highlight{
-  margin:18px 0 10px;
-  padding:12px 14px;
-  border-radius:16px;
-  background:#fff;color:#7a002a;
-  font-weight:800;
-}
+h1{margin:0 0 12px;font-size:20px}
+p{font-size:14px;line-height:1.8}
+
 input,button{
-  width:100%;border:none;border-radius:18px;
-  padding:15px;font-size:16px;text-align:center;
+  width:100%;
+  margin-top:16px;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  font-size:16px;
+  text-align:center;
 }
-input{margin-top:18px}
-button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
+
+button{
+  background:#fff;
+  color:#7a002a;
+  font-weight:700;
+  cursor:pointer;
+}
 
 .final{
   white-space:pre-line;
   font-size:15px;
-  line-height:1.95;
+  line-height:1.9;
 }
 
-/* PHOTO */
 .photo{
-  position:fixed;left:50%;top:50%;
-  transform:translate(-50%,-50%);
-  width:min(480px,92vw);
-  opacity:0;z-index:5;
-  transition:opacity 1.2s ease;
-  pointer-events:none;
+  display:none;
+  margin-top:24px;
 }
-.photo.show{opacity:1}
 .photo img{
   width:100%;
-  border-radius:26px;
-  box-shadow:0 40px 120px rgba(0,0,0,.55);
-  transition:filter 1.2s ease;
+  border-radius:20px;
+  filter:blur(16px);
+  transition:filter 1s ease;
 }
-.photo img.blurred{filter:blur(16px) brightness(.88)}
-.photo img.clear{filter:blur(0) brightness(1)}
+.photo img.clear{
+  filter:blur(0);
+}
 
-/* SECOND QUESTION */
 .sheet{
-  position:fixed;
-  left:50%;
-  bottom:20px;
-  transform:translateX(-50%) translateY(140%);
-  width:min(520px,92vw);
-  z-index:6;
-  opacity:0;
-  transition:.7s cubic-bezier(.2,.9,.2,1);
+  display:none;
+  margin-top:16px;
 }
-.sheet.show{
-  transform:translateX(-50%) translateY(0);
-  opacity:1;
-}
-.sheetInner{
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(18px);
-  border-radius:24px;
-  padding:14px 16px 18px;
-  text-align:center;
-}
-.sheetInner input{
-  width:100%;padding:14px;border:none;border-radius:18px;
-  text-align:center;font-size:16px;
+.sheet input{
+  margin-top:12px;
 }
 
-/* FINAL PILL */
 .after{
-  position:fixed;
-  left:50%;bottom:20px;
-  transform:translateX(-50%);
-  z-index:7;
-  opacity:0;
-  transition:opacity 1s ease;
-}
-.after.show{opacity:1}
-.after .pill{
-  padding:12px 18px;
-  border-radius:999px;
+  display:none;
+  margin-top:20px;
+  padding:12px 16px;
   background:rgba(255,255,255,.18);
-  backdrop-filter:blur(18px);
-  font-weight:700;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:600;
 }
 </style>
 </head>
 
 <body>
-<div class="bg"></div>
-<div class="vignette"></div>
-<canvas id="c"></canvas>
 
-<div class="stage">
+<div class="center">
   <div class="card" id="card">
     <h1>🤍</h1>
-    <p>Bu sayfayı açtıysan…<br>demek ki tam şu anda aklımdasın.</p>
-    <div class="highlight">Evlendiğimiz tarihi yazmanı istiyorum</div>
+    <p>Evlendiğimiz tarihi yazmanı istiyorum</p>
     <input id="d1" placeholder="GGAAYYYY">
-    <button onclick="start()">Devam et</button>
+    <button id="btn">Devam et</button>
   </div>
-</div>
-
-<div class="photo" id="photo">
-  <img id="photoImg" src="IMG_6603_Original.jpeg" class="blurred">
-</div>
-
-<div class="sheet" id="sheet">
-  <div class="sheetInner">
-    <b>İlk arabana ne isim vermiştik?</b>
-    <input id="d2">
-  </div>
-</div>
-
-<div class="after" id="after">
-  <div class="pill">🤍 Bunu bilen biriyle evlendim.</div>
 </div>
 
 <script>
-const DATE="15052022";
-const CAR="poloş";
-const PHOTO_DELAY=6000;
+const DATE = "15052022";
+const CAR  = "poloş";
 
-const MESSAGE=[
-"Bugün 14 Şubat…","",
+const MESSAGE = [
+"Bugün 14 Şubat…",
+"",
 "Ama benim için",
 "senin varlığın",
-"bir güne sığmıyor.","",
+"bir güne sığmıyor.",
+"",
 "Yanımdayken dünya daha sakin,",
 "yokken bile içimde bir yer",
-"“tamam” diyor.","",
+"“tamam” diyor.",
+"",
 "Seni sevmek,",
 "her gün yeniden seçmek gibi.",
-"Hiç zorlanmadan.",
-"Hiç tereddüt etmeden.","",
+"",
 "İyi ki karımsın.",
 "İyi ki benim hayatımsın."
 ];
 
-function start(){
-  if(d1.value.trim()!==DATE) return;
+const card = document.getElementById("card");
+const btn  = document.getElementById("btn");
+const d1   = document.getElementById("d1");
 
-  card.classList.add("fade");
-  setTimeout(()=>{
-    card.innerHTML='<div class="final" id="final"></div>';
-    type(document.getElementById("final"),MESSAGE,22,()=>{
-      setTimeout(()=>{
-        photo.classList.add("show");
-        setTimeout(()=>sheet.classList.add("show"),800);
-      },PHOTO_DELAY);
-    });
-  },600);
-}
+btn.onclick = () => {
+  if(d1.value.trim() !== DATE) return;
 
-d2.addEventListener("input",()=>{
-  if(d2.value.trim().toLowerCase()===CAR){
-    sheet.classList.remove("show");
-    photoImg.classList.remove("blurred");
-    photoImg.classList.add("clear");
-    setTimeout(()=>after.classList.add("show"),600);
-  }
-});
+  card.innerHTML = `<div class="final" id="final"></div>
+  <div class="photo" id="photo">
+    <img id="photoImg" src="IMG_6603_Original.jpeg">
+  </div>
+  <div class="sheet" id="sheet">
+    <p>İlk arabana ne isim vermiştik?</p>
+    <input id="d2">
+  </div>
+  <div class="after" id="after">🤍 Bunu bilen biriyle evlendim.</div>`;
 
-/* TYPEWRITER */
-function type(el,arr,s,done){
+  type(document.getElementById("final"), MESSAGE, 24, () => {
+    setTimeout(() => {
+      const photo = document.getElementById("photo");
+      photo.style.display = "block";
+
+      setTimeout(() => {
+        document.getElementById("sheet").style.display = "block";
+      }, 800);
+    }, 6000);
+  });
+};
+
+function type(el, arr, speed, done){
   let i=0,j=0;
   (function t(){
     if(i>=arr.length){done();return;}
-    let l=arr[i];
-    if(l===""&&j===0){el.textContent+="\n";i++;return setTimeout(t,140);}
-    el.textContent+=l[j]||"";j++;
-    if(j>=l.length){el.textContent+="\n";i++;j=0;return setTimeout(t,220);}
-    setTimeout(t,s);
+    const line = arr[i];
+    if(line==="" && j===0){
+      el.textContent += "\n";
+      i++; return setTimeout(t,150);
+    }
+    el.textContent += line[j] || "";
+    j++;
+    if(j>=line.length){
+      el.textContent += "\n";
+      i++; j=0;
+      return setTimeout(t,220);
+    }
+    setTimeout(t,speed);
   })();
 }
+
+document.addEventListener("input",e=>{
+  if(e.target.id==="d2"){
+    if(e.target.value.trim().toLowerCase()===CAR){
+      document.getElementById("photoImg").classList.add("clear");
+      document.getElementById("sheet").style.display="none";
+      document.getElementById("after").style.display="inline-block";
+    }
+  }
+});
 </script>
+
 </body>
 </html>
