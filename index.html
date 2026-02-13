@@ -3,153 +3,155 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>💖</title>
+<title>🤍</title>
 
 <style>
-:root{
-  --bg1:#2a0011;
-  --bg2:#7a002a;
-  --fg:#fff;
-}
-*{box-sizing:border-box}
-body{
+html,body{
   margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  color:var(--fg);
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
   background:
     radial-gradient(900px 600px at 20% 20%, rgba(255,255,255,.08), transparent 60%),
-    linear-gradient(180deg, var(--bg1), var(--bg2));
-  overflow:hidden;
+    radial-gradient(800px 600px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
+    linear-gradient(180deg, #2a0011, #7a002a);
+  color:#fff;
 }
 
-/* Floating hearts */
+/* floating hearts */
 canvas{
   position:fixed;
   inset:0;
   pointer-events:none;
+  z-index:1;
 }
 
-/* Glass card */
+/* center card */
 .card{
   position:relative;
   z-index:2;
   max-width:420px;
   margin:12vh auto;
-  padding:28px 24px;
-  border-radius:22px;
-  background:rgba(255,255,255,.12);
-  backdrop-filter: blur(14px);
-  box-shadow:0 30px 80px rgba(0,0,0,.45);
+  padding:32px 26px;
+  border-radius:26px;
+  background:rgba(255,255,255,.14);
+  backdrop-filter: blur(16px);
+  box-shadow:0 40px 90px rgba(0,0,0,.45);
   text-align:center;
+  animation:fade .8s ease;
+}
+
+@keyframes fade{
+  from{opacity:0; transform:translateY(12px)}
+  to{opacity:1; transform:none}
 }
 
 h1{
-  font-size:20px;
   margin:0 0 14px;
+  font-size:20px;
   font-weight:700;
 }
 
 p{
+  margin:0;
   font-size:14px;
-  line-height:1.6;
-  opacity:.9;
+  line-height:1.7;
+  opacity:.95;
 }
 
 input{
   width:100%;
+  margin-top:22px;
   padding:14px;
-  margin-top:18px;
-  border-radius:14px;
+  border-radius:16px;
   border:none;
   font-size:16px;
   text-align:center;
+  outline:none;
 }
 
 button{
-  margin-top:16px;
   width:100%;
+  margin-top:16px;
   padding:14px;
-  border-radius:14px;
+  border-radius:16px;
   border:none;
   background:#fff;
   color:#7a002a;
-  font-weight:700;
   font-size:16px;
-}
-
-.fade{
-  animation:fade .6s ease;
-}
-@keyframes fade{
-  from{opacity:0; transform:translateY(10px)}
-  to{opacity:1; transform:none}
+  font-weight:700;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="hearts"></canvas>
+<canvas id="c"></canvas>
 
-<div class="card fade" id="box">
-  <h1>💌 Sana küçük bir sürprizim var</h1>
+<div class="card" id="box">
+  <h1>🤍</h1>
   <p>
     Bu sayfayı açtıysan…  
-    doğru yerdesin.  
+    demek ki tam şu anda  
+    aklımdasın.
     <br><br>
-    Devam etmek için  
-    <b>bizden bir şeyi</b> girmeni istiyorum 🤍
+    Devamı için  
+    <b>sadece bize ait</b>  
+    olan şeyi yazmanı istiyorum.
   </p>
 
-  <input id="pass" placeholder="Hatırladığın o şey…">
-  <button onclick="check()">Devam et</button>
+  <input id="x" placeholder="🤍">
+  <button onclick="go()">Devam et</button>
 </div>
 
 <script>
-/* ====== KİŞİSELLEŞTİR ====== */
-const PASSWORD = "1402"; // evlilik tarihi vs
+/* ====== SADECE BURAYI DEĞİŞTİR ====== */
+const SECRET = "1402";
 
-const FINAL_TEXT = `
+const MESSAGE = `
 Bugün 14 Şubat…
 
-Ama benim için sen,
-takvimden bağımsız bir şeysin.
+Ama benim için
+senin varlığın
+bir güne sığmıyor.
 
-Yorulduğumda içimi toparlayan,
-sessizken bile yanımda olan,
-hayatımın en güvenli yeri sensin.
+Yanımdayken her şey daha sakin,
+yokken bile içimde bir yer
+“tamam” diyor.
 
-Seni her gün yeniden seçiyorum.
-Hiç şüphe duymadan.
+Seni sevmek,
+her gün yeniden seçmek gibi.
+Hiç zorlanmadan.
+Hiç tereddüt etmeden.
 
 İyi ki karımsın.
-İyi ki benim evimsin.
+İyi ki benim hayatımsın.
 
 🤍
 `;
 
-/* ====== LOGIC ====== */
-function check(){
-  const v = document.getElementById("pass").value.trim();
-  if(v === PASSWORD){
-    document.getElementById("box").innerHTML = `
-      <h1>🤍</h1>
-      <p style="white-space:pre-line">${FINAL_TEXT}</p>
-    `;
-    burst(40);
+/* ====== AKIŞ ====== */
+function go(){
+  const v = document.getElementById("x").value.trim();
+  if(v === SECRET){
+    document.getElementById("box").innerHTML =
+      `<h1>🤍</h1><p style="white-space:pre-line">${MESSAGE}</p>`;
+    burst(50);
   }else{
-    document.getElementById("pass").value="";
-    document.getElementById("pass").placeholder="Bir daha dene 🤍";
+    document.getElementById("x").value="";
+    document.getElementById("x").placeholder="Bir daha dene 🤍";
   }
 }
 
-/* ====== HEARTS ====== */
-const c = document.getElementById("hearts");
-const ctx = c.getContext("2d");
+/* ====== UÇAN KALPLER ====== */
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
 let w,h;
 function resize(){
-  w=c.width=innerWidth;
-  h=c.height=innerHeight;
+  w = canvas.width = innerWidth;
+  h = canvas.height = innerHeight;
 }
 resize(); addEventListener("resize",resize);
 
@@ -163,21 +165,21 @@ function spawn(){
     a:0.2+Math.random()*0.4
   });
 }
-function draw(){
+function loop(){
   ctx.clearRect(0,0,w,h);
   if(Math.random()>0.85) spawn();
-  hearts.forEach(hh=>{
-    hh.y-=hh.v;
-    ctx.globalAlpha=hh.a;
-    ctx.fillStyle="#fff";
+  hearts.forEach(o=>{
+    o.y -= o.v;
+    ctx.globalAlpha = o.a;
+    ctx.fillStyle = "#fff";
     ctx.beginPath();
-    ctx.arc(hh.x,hh.y,hh.s,0,Math.PI*2);
+    ctx.arc(o.x,o.y,o.s,0,Math.PI*2);
     ctx.fill();
   });
-  hearts=hearts.filter(hh=>hh.y>-40);
-  requestAnimationFrame(draw);
+  hearts = hearts.filter(o=>o.y>-40);
+  requestAnimationFrame(loop);
 }
-draw();
+loop();
 
 function burst(n){
   for(let i=0;i<n;i++) spawn();
