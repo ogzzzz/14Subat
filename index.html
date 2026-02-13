@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>14 Şubat 💘</title>
+
+  <style>
+    :root{
+      --bgA:#2a0011;
+      --bgB:#7a002a;
+      --bgC:#ff2f6d;
+      --fg:#fff6fb;
+      --muted:rgba(255,246,251,.72);
+      --glass:rgba(255,255,255,.10);
+      --glass2:rgba(255,255,255,.16);
+      --hot:#ff2f6d;
+      --hot2:#ffd0de;
+      --ok:#9fffd6;
+      --warn:#ffd0d0;
+      --shadow:0 18px 55px rgba(0,0,0,.45);
+      --r:18px;
+      --px:0px; --py:0px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--fg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,.10), transparent 60%),
+                  radial-gradient(900px 600px at 90% 20%, rgba(255,255,255,.06), transparent 55%),
+                  linear-gradient(180deg, var(--bgA), var(--bgB) 55%, #140008);
+      overflow-x:hidden;
+    }
+
+    /* ===== Cinematic red background layers ===== */
+    .bg{
+      position:fixed; inset:0; z-index:0;
+      pointer-events:none; overflow:hidden;
+    }
+    .bg .base{
+      position:absolute; inset:-12%;
+      background:
+        radial-gradient(900px 650px at 20% 18%, rgba(255,47,109,.30), transparent 60%),
+        radial-gradient(850px 620px at 85% 22%, rgba(255,180,205,.14), transparent 62%),
+        radial-gradient(950px 700px at 55% 88%, rgba(255,47,109,.18), transparent 65%),
+        linear-gradient(180deg, #21000c, #7a002a 50%, #160008);
+      transform: translate3d(var(--px), var(--py), 0) scale(1.05);
+      filter:saturate(1.25) contrast(1.06);
+    }
+    .bg .mesh{
+      position:absolute; inset:-25%;
+      background:
+        radial-gradient(520px 380px at 20% 40%, rgba(255,255,255,.09), transparent 58%),
+        radial-gradient(650px 500px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
+        radial-gradient(720px 560px at 55% 85%, rgba(255,255,255,.05), transparent 62%);
+      filter: blur(14px);
+      opacity:.95;
+      animation: meshMove 10s ease-in-out infinite alternate;
+      transform: translate3d(calc(var(--px)*1.8), calc(var(--py)*1.2), 0) scale(1.05);
+    }
+    @keyframes meshMove{
+      from{ transform: translate3d(calc(var(--px)*1.8 - 12px), calc(var(--py)*1.2 - 10px), 0) scale(1.03); }
+      to  { transform: translate3d(calc(var(--px)*1.8 + 12px), calc(var(--py)*1.2 + 10px), 0) scale(1.06); }
+    }
+
+    .bg .vignette{
+      position:absolute; inset:-10%;
+      background: radial-gradient(circle at 50% 45%, transparent 45%, rgba(0,0,0,.62) 92%);
+      mix-blend-mode:multiply;
+    }
+
+    /* film grain (svg noise) */
+    .bg .grain{
+      position:absolute; inset:-30%;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      opacity:.22;
+      mix-blend-mode:overlay;
+      animation: grain 1.35s steps(2) infinite;
+    }
+    @keyframes grain{
+      0%{transform:translate3d(0,0,0)}
+      25%{transform:translate3d(-2%,1%,0)}
+      50%{transform:translate3d(1%,-2%,0)}
+      75%{transform:translate3d(2%,2%,0)}
+      100%{transform:translate3d(0,0,0)}
+    }
+
+    /* ===== Floating white hearts layer (canvas) ===== */
+    canvas#hearts{
+      position:fixed; inset:0; z-index:1;
+      pointer-events:none;
+      filter: drop-shadow(0 10px 22px rgba(255,255,255,.15));
+    }
+
+    /* ===== UI wrapper ===== */
+    .wrap{
+      position:relative; z-index:2;
+      padding:18px 14px 26px;
+      max-width:860px;
+      margin:0 auto;
+    }
+    .top{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 16px;
+      border-radius:var(--r);
+      background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08));
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(14px);
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{
+      width:34px; height:34px; border-radius:12px;
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.12) 45%),
+                  linear-gradient(135deg, rgba(255,47,109,.95), rgba(255,208,222,.75));
+      box-shadow:0 14px 34px rgba(255,47,109,.25);
+    }
+    .title{line-height:1.05}
+    .title b{display:block; font-size:14px; letter-spacing:.3px}
+    .title span{display:block; font-size:12px; color:var(--muted); margin-top:2px}
+    .badge{
+      display:flex; align-items:center; gap:8px; color:var(--muted);
+      font-size:12px; padding:8px 10px; border-radius:999px;
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14)
+    }
+    .dot{
+      width:8px;height:8px;border-radius:99px;background:var(--ok);
+      box-shadow:0 0 16px rgba(159,255,214,.85)
+    }
+
+    .grid{display:grid; grid-template-columns:1.25fr .75fr; gap:14px; margin-top:14px}
+    @media(max-width:780px){ .grid{grid-template-columns:1fr} }
+
+    .card{
+      border-radius:var(--r);
+      background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(14px);
+      border:1px solid rgba(255,255,255,.14);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:16px 16px 12px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .card .hd h1{margin:0; font-size:18px}
+    .card .hd p{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.45}
+
+    .stepper{display:flex; gap:8px; align-items:center; justify-content:flex-end}
+    .pill{
+      width:34px; height:10px; border-radius:999px;
+      background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.16);
+      position:relative; overflow:hidden;
+    }
+    .pill.on{
+      background:linear-gradient(90deg, rgba(255,47,109,.92), rgba(255,208,222,.70));
+      border-color:rgba(255,255,255,.22)
+    }
+
+    .bd{padding:16px}
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .btn{
+      cursor:pointer; user-select:none;
+      border:none; color:#1a0010;
+      padding:12px 14px; border-radius:14px;
+      background:linear-gradient(135deg, rgba(255,208,222,.98), rgba(255,255,255,.85));
+      box-shadow:0 16px 40px rgba(255,47,109,.22);
+      font-weight:800; letter-spacing:.2px;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn.ghost{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:none; font-weight:700; color:rgba(255,246,251,.86)
+    }
+    .btn.small{padding:10px 12px; border-radius:12px; font-size:13px}
+
+    .input{
+      flex:1; min-width:200px;
+      padding:12px 12px; border-radius:14px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.18);
+      color:var(--fg);
+      outline:none;
+    }
+    .input::placeholder{color:rgba(255,246,251,.45)}
+    .hint{margin-top:10px; font-size:12px; color:var(--muted); line-height:1.45}
+    .hint b{color:#fff}
+
+    .msg{
+      margin-top:12px; padding:12px 12px; border-radius:14px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      color:rgba(255,246,251,.86);
+      font-size:13px; line-height:1.55;
+    }
+    .msg.ok{
+      border-color:rgba(159,255,214,.35);
+      background:rgba(159,255,214,.10);
+      color:rgba(220,255,241,.95)
+    }
+    .msg.bad{
+      border-color:rgba(255,208,208,.30);
+      background:rgba(255,208,208,.10);
+      color:rgba(255,240,240,.95)
+    }
+
+    .kbd{
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:12px; color:rgba(255,246,251,.82);
+      padding:6px 10px; border-radius:999px;
+      background:rgba(0,0,0,.20);
+      border:1px solid rgba(255,255,255,.12)
+    }
+
+    .side .bd{display:grid; gap:12px}
+    .stat{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 12px; border-radius:14px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14)
+    }
+    .stat span{font-size:12px; color:var(--muted)}
+    .stat b{font-size:13px}
+
+    .gallery{
+      display:grid; grid-template-columns:repeat(3, 1fr);
+      gap:10px;
+    }
+    .ph{
+      aspect-ratio:1/1;
+      border-radius:16px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.20), rgba(255,255,255,.06) 58%),
+        linear-gradient(135deg, rgba(255,47,109,.34), rgba(255,208,222,.16));
+      border:1px solid rgba(255,255,255,.16);
+      overflow:hidden;
+      position:relative;
+    }
+    .ph img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.08) contrast(1.05)}
+    .ph::after{
+      content:"";
+      position:absolute; inset:-35%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+      transform:rotate(12deg);
+      animation:sweep 3.4s infinite linear;
+    }
+    @keyframes sweep{to{transform:rotate(12deg) translateX(70%)}}
+
+    .footer{
+      margin-top:14px; padding:14px 16px; border-radius:var(--r);
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--muted); font-size:12px; line-height:1.55;
+      text-align:center;
+    }
+
+    /* ===== Modal ===== */
+    .modal{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.62); z-index:5;
+      padding:20px;
+    }
+    .modal.on{display:flex}
+    .sheet{
+      width:min(740px, 96vw);
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.08));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 30px 90px rgba(0,0,0,.65);
+      backdrop-filter: blur(16px);
+      overflow:hidden;
+    }
+    .sheet .hd{padding:16px 16px 12px; border-bottom:1px solid rgba(255,255,255,.14)}
+    .sheet .hd h2{margin:0;font-size:16px}
+    .sheet .bd{padding:16px}
+    .line{height:1px;background:rgba(255,255,255,.14); margin:14px 0}
+    .type{
+      font-size:14px; line-height:1.7;
+      color:rgba(255,246,251,.92);
+      min-height: 120px;
+      white-space:pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Background layers -->
+  <div class="bg" aria-hidden="true">
+    <div class="base"></div>
+    <div class="mesh"></div>
+    <div class="vignette"></div>
+    <div class="grain"></div>
+  </div>
+
+  <!-- Floating hearts -->
+  <canvas id="hearts"></canvas>
+
+  <div class="wrap">
+    <div class="top" id="topBar">
+      <div class="brand">
+        <div class="logo"></div>
+        <div class="title">
+          <b id="appTitle">Karıma Özel 💘</b>
+          <span id="appSub">14 Şubat — gizli deneyim</span>
+        </div>
+      </div>
+      <div class="badge"><span class="dot"></span><span id="statusText">hazır</span></div>
+    </div>
+
+    <div class="grid">
+      <div class="card main">
+        <div class="hd">
+          <div>
+            <h1 id="stageTitle">🔐 Kilitli Kapı</h1>
+            <p id="stageDesc">Bu sayfayı açtıysan… tamam. Şimdi 3 aşamalı mini “aşk oyunu” var. Finalde her şey açılacak.</p>
+          </div>
+          <div class="stepper">
+            <div class="pill" id="p1"></div>
+            <div class="pill" id="p2"></div>
+            <div class="pill" id="p3"></div>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="row" style="align-items:center; justify-content:space-between;">
+            <div class="kbd">📌 İpucu: <span id="hintShort">Sadece ikinizin bildiği bir şey</span></div>
+            <button class="btn ghost small" id="resetBtn">Sıfırla</button>
+          </div>
+
+          <div class="line"></div>
+
+          <div id="stageArea"></div>
+        </div>
+      </div>
+
+      <div class="card side">
+        <div class="hd">
+          <div>
+            <h1>✨ Panel</h1>
+            <p>İlerleme & final.</p>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="stat"><span>İlerleme</span><b id="progText">0 / 3</b></div>
+          <div class="stat"><span>Deneme</span><b id="triesText">0</b></div>
+          <div class="stat"><span>Tema</span><b id="modeText">Kırmızı</b></div>
+
+          <div class="gallery" id="gallery">
+            <!-- İstersen foto koy: <img src="..."> -->
+            <div class="ph" title="Foto 1"></div>
+            <div class="ph" title="Foto 2"></div>
+            <div class="ph" title="Foto 3"></div>
+          </div>
+
+          <button class="btn" id="openFinalBtn" style="display:none;">Finali Aç 💘</button>
+          <button class="btn ghost" id="shareBtn">Link Kopyala</button>
+
+          <div class="footer">
+            İnternetsiz de çalışır. <br/>
+            “Kaldığı yerden devam” açık.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final modal -->
+  <div class="modal" id="modal">
+    <div class="sheet">
+      <div class="hd">
+        <h2 id="finalTitle">💖 Final</h2>
+      </div>
+      <div class="bd">
+        <div class="type" id="finalType"></div>
+        <div class="line"></div>
+        <div class="row">
+          <button class="btn" id="confettiBtn">Konfeti 🎉</button>
+          <button class="btn ghost" id="closeBtn">Kapat</button>
+        </div>
+        <div class="hint" style="margin-top:12px">
+          İstersen finale <b>ses</b> de eklenir. (CFG.audioUrl)
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* =========================
+   CUSTOMIZE (Burayı değiştir)
+   ========================= */
+const CFG = {
+  title: "Karıma Özel 💘",
+  sub: "14 Şubat — 3 aşamalı sürpriz",
+  modeText: "Kırmızı • Uçan Kalpler",
+  pass1: "1402",
+  hint1: "Evlilik tarihi / özel sayınız",
+  pass2: "mango",
+  hint2: "İkinizi tek kelimeyle güldüren şey 😏",
+  quiz: {
+    question: "Benim en sevdiğim anımız hangisi?",
+    options: ["İlk mesaj", "İlk kavga sonrası barışma", "Gülmekten öldüğümüz o an"],
+    correctIndex: 2
+  },
+  hint3: "Bunu sen benden iyi biliyorsun…",
+  finalTitle: "Sonsuz Sen 💖",
+  finalText:
+`Bugün 14 Şubat…
+Ama benim için senin varlığın her günün bayramı.
+
+Seninle aynı evin havası bile daha yumuşak.
+Yorgun olsam bile içimde bir yer “tamam” diyor,
+çünkü eve dönünce sen varsın.
+
+Bazen hayat hızlı gidiyor…
+Ama ben her şeyin içinde seni seçiyorum.
+Yine. Yine. Yine.
+
+İyi ki karımsın.
+İyi ki benim evimsin.
+
+Bu akşam: küçük bir gerçek sürpriz daha var. 🌹`,
+  audioUrl: "" // istersen mp3 linki
+};
+/* ========================= */
+
+const LS_KEY = "valentine_escape_red_v1";
+const els = {
+  appTitle: document.getElementById("appTitle"),
+  appSub: document.getElementById("appSub"),
+  statusText: document.getElementById("statusText"),
+  stageTitle: document.getElementById("stageTitle"),
+  stageDesc: document.getElementById("stageDesc"),
+  stageArea: document.getElementById("stageArea"),
+  hintShort: document.getElementById("hintShort"),
+  p1: document.getElementById("p1"),
+  p2: document.getElementById("p2"),
+  p3: document.getElementById("p3"),
+  progText: document.getElementById("progText"),
+  triesText: document.getElementById("triesText"),
+  modeText: document.getElementById("modeText"),
+  openFinalBtn: document.getElementById("openFinalBtn"),
+  shareBtn: document.getElementById("shareBtn"),
+  resetBtn: document.getElementById("resetBtn"),
+  modal: document.getElementById("modal"),
+  finalTitle: document.getElementById("finalTitle"),
+  finalType: document.getElementById("finalType"),
+  confettiBtn: document.getElementById("confettiBtn"),
+  closeBtn: document.getElementById("closeBtn"),
+  topBar: document.getElementById("topBar"),
+};
+
+let state = loadState();
+applyCfg();
+render();
+
+/* ===== Parallax (red background) ===== */
+(function(){
+  const root = document.documentElement;
+  function setParallax(x,y){
+    const px = (x-0.5) * 16;
+    const py = (y-0.5) * 12;
+    root.style.setProperty('--px', px+'px');
+    root.style.setProperty('--py', py+'px');
+  }
+  setParallax(0.5,0.5);
+
+  window.addEventListener('mousemove', (e)=>{
+    setParallax(e.clientX/innerWidth, e.clientY/innerHeight);
+  }, {passive:true});
+
+  window.addEventListener('deviceorientation', (e)=>{
+    const x = (e.gamma ?? 0) / 45;
+    const y = (e.beta ?? 0) / 45;
+    setParallax(0.5 + x*0.32, 0.5 + y*0.28);
+  }, {passive:true});
+})();
+
+/* ===== State / Render ===== */
+function applyCfg(){
+  els.appTitle.textContent = CFG.title;
+  els.appSub.textContent = CFG.sub;
+  els.modeText.textContent = CFG.modeText;
+  els.finalTitle.textContent = CFG.finalTitle;
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return { step: 1, tries: 0, done: {1:false,2:false,3:false} };
+}
+function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+function resetAll(){
+  state = { step: 1, tries: 0, done: {1:false,2:false,3:false} };
+  saveState(); render(); toast("Sıfırlandı 💘");
+}
+
+function render(){
+  const doneCount = [1,2,3].filter(i => state.done[i]).length;
+  els.progText.textContent = `${doneCount} / 3`;
+  els.triesText.textContent = `${state.tries}`;
+  els.p1.classList.toggle("on", state.done[1]);
+  els.p2.classList.toggle("on", state.done[2]);
+  els.p3.classList.toggle("on", state.done[3]);
+  els.statusText.textContent = state.done[3] ? "final hazır" : (state.step===1 ? "kilitli" : `aşama ${state.step}`);
+  els.openFinalBtn.style.display = state.done[3] ? "block" : "none";
+
+  if(state.step === 1) renderStep1();
+  if(state.step === 2) renderStep2();
+  if(state.step === 3) renderStep3();
+}
+
+function incTry(){ state.tries++; saveState(); els.triesText.textContent = `${state.tries}`; }
+function okAdvance(step){
+  state.done[step] = true;
+  state.step = Math.min(3, step+1);
+  saveState(); render();
+  confetti(60);
+}
+function renderStep1(){
+  els.stageTitle.textContent = "🔐 Aşama 1 — Şifre";
+  els.stageDesc.textContent = "İlk kapı: kısa bir şifre. Sadece ikiniz bilirsiniz.";
+  els.hintShort.textContent = CFG.hint1;
+
+  els.stageArea.innerHTML = `
+    <div class="row">
+      <input class="input" id="in1" inputmode="numeric" placeholder="Şifre (örn: 1402)" autocomplete="off" />
+      <button class="btn" id="btn1">Kilidi Aç</button>
+      <button class="btn ghost" id="hint1">İpucu</button>
+    </div>
+    <div class="hint" id="h1" style="display:none">🗝️ <b>İpucu:</b> ${escapeHtml(CFG.hint1)}</div>
+    <div class="msg" id="m1" style="display:none"></div>
+  `;
+  const in1 = document.getElementById("in1");
+  const btn1 = document.getElementById("btn1");
+  const hint1 = document.getElementById("hint1");
+  const h1 = document.getElementById("h1");
+  const m1 = document.getElementById("m1");
+
+  hint1.onclick = ()=> h1.style.display="block";
+  btn1.onclick = ()=>{
+    incTry();
+    const v = (in1.value || "").trim();
+    m1.style.display="block";
+    if(v === CFG.pass1){
+      m1.className="msg ok";
+      m1.textContent="Doğru… Çünkü sen hep doğru yerden yakalarsın. 🤍";
+      okAdvance(1);
+    }else{
+      m1.className="msg bad";
+      m1.textContent="Yanlış 😏 Bir daha…";
+      shake(btn1);
+    }
+  };
+  in1.addEventListener("keydown", (e)=>{ if(e.key==="Enter") btn1.click(); });
+}
+function renderStep2(){
+  els.stageTitle.textContent = "🧩 Aşama 2 — Tek Kelime";
+  els.stageDesc.textContent = "Tek kelime. Doğru kelime = ikinci kapı.";
+  els.hintShort.textContent = CFG.hint2;
+
+  els.stageArea.innerHTML = `
+    <div class="row">
+      <input class="input" id="in2" placeholder="Tek kelime (küçük harf)" autocomplete="off" />
+      <button class="btn" id="btn2">Devam</button>
+      <button class="btn ghost" id="hint2">İpucu</button>
+    </div>
+    <div class="hint" id="h2" style="display:none">🗝️ <b>İpucu:</b> ${escapeHtml(CFG.hint2)}</div>
+    <div class="msg" id="m2" style="display:none"></div>
+  `;
+  const in2 = document.getElementById("in2");
+  const btn2 = document.getElementById("btn2");
+  const hint2 = document.getElementById("hint2");
+  const h2 = document.getElementById("h2");
+  const m2 = document.getElementById("m2");
+
+  hint2.onclick = ()=> h2.style.display="block";
+  btn2.onclick = ()=>{
+    incTry();
+    const v = (in2.value || "").trim().toLowerCase();
+    m2.style.display="block";
+    if(v === (CFG.pass2 || "").toLowerCase()){
+      m2.className="msg ok";
+      m2.textContent="Evet… tam da o. 🤍";
+      okAdvance(2);
+    }else{
+      m2.className="msg bad";
+      m2.textContent="Değil… ama yakınsın 😏";
+      shake(btn2);
+    }
+  };
+  in2.addEventListener("keydown", (e)=>{ if(e.key==="Enter") btn2.click(); });
+}
+function renderStep3(){
+  els.stageTitle.textContent = "🎯 Aşama 3 — Seçim";
+  els.stageDesc.textContent = "Son kapı: doğru anıyı seç.";
+  els.hintShort.textContent = CFG.hint3;
+
+  const opts = CFG.quiz.options.map((t,i)=>`
+    <button class="btn ghost" data-i="${i}" style="width:100%; text-align:left;">
+      ${escapeHtml(t)}
+    </button>
+  `).join("");
+
+  els.stageArea.innerHTML = `
+    <div class="msg" style="margin-top:0"><b>${escapeHtml(CFG.quiz.question)}</b></div>
+    <div style="display:grid; gap:10px; margin-top:10px">${opts}</div>
+    <div class="hint" id="h3" style="display:none">🗝️ <b>İpucu:</b> ${escapeHtml(CFG.hint3)}</div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn ghost small" id="hint3">İpucu</button>
+    </div>
+    <div class="msg" id="m3" style="display:none"></div>
+  `;
+  const m3 = document.getElementById("m3");
+  document.querySelectorAll("[data-i]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      incTry();
+      const idx = Number(btn.getAttribute("data-i"));
+      m3.style.display="block";
+      if(idx === CFG.quiz.correctIndex){
+        m3.className="msg ok";
+        m3.textContent="Bitti… Final senin 🤍";
+        state.done[3]=true; saveState(); render();
+        setTimeout(openFinal, 420);
+      }else{
+        m3.className="msg bad";
+        m3.textContent="Olmadı 😏 Bir daha…";
+        shake(btn);
+      }
+    });
+  });
+  document.getElementById("hint3").onclick = ()=> document.getElementById("h3").style.display="block";
+}
+
+/* ===== Final ===== */
+function openFinal(){
+  els.modal.classList.add("on");
+  els.finalType.textContent = "";
+  typewriter(els.finalType, CFG.finalText, 14);
+  confetti(160);
+  if(CFG.audioUrl){
+    try{
+      const a = new Audio(CFG.audioUrl);
+      a.volume = 0.85;
+      a.play().catch(()=>{});
+    }catch(e){}
+  }
+}
+
+els.openFinalBtn.onclick = openFinal;
+els.closeBtn.onclick = ()=> els.modal.classList.remove("on");
+els.confettiBtn.onclick = ()=> confetti(220);
+els.resetBtn.onclick = resetAll;
+
+/* Link copy */
+els.shareBtn.onclick = async ()=>{
+  const url = location.href;
+  try{
+    await navigator.clipboard.writeText(url);
+    toast("Kopyalandı ✅ (dosyayı Drive’a koyarsan link olur)");
+  }catch(e){
+    toast("Kopyalanamadı. Adresi elle kopyala: " + url);
+  }
+};
+
+/* Tap top bar = mini confetti */
+els.topBar.addEventListener("click", ()=> confetti(30));
+
+/* ===== Helpers ===== */
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+function shake(el){
+  el.animate([
+    {transform:"translateX(0)"},
+    {transform:"translateX(-6px)"},
+    {transform:"translateX(6px)"},
+    {transform:"translateX(-4px)"},
+    {transform:"translateX(4px)"},
+    {transform:"translateX(0)"},
+  ], {duration:260, easing:"cubic-bezier(.2,.9,.2,1)"});
+}
+
+let toastT;
+function toast(text){
+  clearTimeout(toastT);
+  let t = document.getElementById("toast");
+  if(!t){
+    t = document.createElement("div");
+    t.id="toast";
+    t.style.cssText = `
+      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      z-index:6; padding:12px 14px; border-radius:999px;
+      background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.16);
+      color:rgba(255,255,255,.94); font-size:13px;
+      backdrop-filter: blur(10px); box-shadow:0 18px 60px rgba(0,0,0,.45);
+      max-width:92vw; text-align:center;
+    `;
+    document.body.appendChild(t);
+  }
+  t.textContent = text;
+  t.style.opacity="1";
+  toastT = setTimeout(()=>{ t.style.opacity="0"; }, 2400);
+}
+
+async function typewriter(el, text, speed){
+  el.textContent = "";
+  for(let i=0;i<text.length;i++){
+    el.textContent += text[i];
+    await new Promise(r=>setTimeout(r, speed));
+    if(i%26===0) await new Promise(r=>setTimeout(r, speed*1.2));
+  }
+}
+
+/* ===== Confetti ===== */
+function confetti(n=120){
+  const colors = ["#ffffff","#ffd0de","#ff2f6d","#ffe7ef"];
+  for(let i=0;i<n;i++){
+    const d = document.createElement("div");
+    const s = 6 + Math.random()*10;
+    d.style.cssText = `
+      position:fixed; left:${Math.random()*100}vw; top:-12px;
+      width:${s}px; height:${s*0.65}px;
+      background:${colors[(Math.random()*colors.length)|0]};
+      opacity:${0.75+Math.random()*0.25};
+      border-radius:${Math.random()>0.6 ? "999px":"4px"};
+      transform:rotate(${Math.random()*360}deg);
+      z-index:6; pointer-events:none;
+    `;
+    document.body.appendChild(d);
+    const x = (Math.random()*2-1) * 180;
+    const y = 650 + Math.random()*280;
+    d.animate([
+      { transform:`translate(0,0) rotate(${Math.random()*360}deg)` },
+      { transform:`translate(${x}px,${y}px) rotate(${720+Math.random()*360}deg)` }
+    ], { duration: 1400 + Math.random()*900, easing:"cubic-bezier(.2,.7,.2,1)" }).onfinish = ()=> d.remove();
+  }
+}
+
+/* =========================
+   FLOATING WHITE HEARTS CANVAS
+   ========================= */
+const canvas = document.getElementById("hearts");
+const ctx = canvas.getContext("2d");
+let W, H, DPR;
+let hearts = [];
+let lastSpawn = 0;
+
+function resize(){
+  DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+  W = canvas.width = Math.floor(innerWidth * DPR);
+  H = canvas.height = Math.floor(innerHeight * DPR);
+  canvas.style.width = innerWidth + "px";
+  canvas.style.height = innerHeight + "px";
+}
+window.addEventListener("resize", resize, {passive:true});
+resize();
+
+function heartShape(t){
+  // parametric heart
+  const x = 16*Math.pow(Math.sin(t),3);
+  const y = 13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
+  return {x, y};
+}
+
+function spawnHeart(){
+  const size = (10 + Math.random()*22) * DPR;
+  hearts.push({
+    x: (Math.random()*W),
+    y: H + (40*Math.random()*DPR),
+    s: size,
+    vy: (0.55 + Math.random()*1.35) * DPR,
+    vx: (Math.random()*0.8 - 0.4) * DPR,
+    wob: Math.random()*Math.PI*2,
+    wobSpd: (0.015 + Math.random()*0.03),
+    rot: Math.random()*Math.PI*2,
+    vr: (Math.random()*0.02 - 0.01),
+    a: 0.18 + Math.random()*0.28
+  });
+}
+
+function drawHeart(x,y,size,alpha,rot){
+  ctx.save();
+  ctx.translate(x,y);
+  ctx.rotate(rot);
+  ctx.globalAlpha = alpha;
+
+  // glow
+  const g = ctx.createRadialGradient(0,0,0,0,0,size*2.2);
+  g.addColorStop(0, `rgba(255,255,255,${alpha})`);
+  g.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = g;
+
+  ctx.beginPath();
+  for(let i=0;i<=40;i++){
+    const t = (i/40) * Math.PI*2;
+    const hp = heartShape(t);
+    const sx = (hp.x/18) * size;
+    const sy = (-hp.y/18) * size;
+    if(i===0) ctx.moveTo(sx, sy);
+    else ctx.lineTo(sx, sy);
+  }
+  ctx.closePath();
+  ctx.fill();
+
+  // crisp edge
+  ctx.globalAlpha = Math.min(0.7, alpha*1.8);
+  ctx.strokeStyle = "rgba(255,255,255,0.6)";
+  ctx.lineWidth = Math.max(1, 1.2*DPR);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function tick(ts){
+  ctx.clearRect(0,0,W,H);
+
+  // spawn rate (more = more hearts)
+  if(!lastSpawn) lastSpawn = ts;
+  const dt = ts - lastSpawn;
+  if(dt > 70){
+    spawnHeart();
+    if(Math.random() > 0.55) spawnHeart();
+    lastSpawn = ts;
+  }
+
+  hearts = hearts.filter(h => h.y + h.s*3 > -50*DPR);
+
+  for(const h of hearts){
+    h.wob += h.wobSpd;
+    h.x += h.vx + Math.sin(h.wob) * (0.35*DPR);
+    h.y -= h.vy;
+    h.rot += h.vr;
+
+    // fade in/out
+    const life = (h.y / H); // 1->0
+    const alpha = Math.max(0, Math.min(1, (1-life)*1.2)) * h.a;
+
+    drawHeart(h.x, h.y, h.s, alpha, h.rot);
+  }
+
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+// little boost on tap
+window.addEventListener("click", ()=>{
+  for(let i=0;i<8;i++) spawnHeart();
+}, {passive:true});
+</script>
+
+</body>
+</html>
