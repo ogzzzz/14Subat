@@ -22,6 +22,7 @@ html,body{
     linear-gradient(120deg,#2a0010,#7a002a,#b1003a,#7a002a);
   background-size:260% 260%;
   animation:bg 18s ease-in-out infinite;
+  pointer-events:none; /* ✅ */
 }
 @keyframes bg{
   0%{background-position:10% 20%}
@@ -31,6 +32,7 @@ html,body{
 .vignette{
   position:fixed;inset:0;z-index:1;
   background:radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,.65) 100%);
+  pointer-events:none; /* ✅ */
 }
 
 /* HEARTS */
@@ -46,6 +48,7 @@ canvas{position:fixed;inset:0;z-index:2;pointer-events:none}
   width:100%;max-width:460px;
   background:rgba(255,255,255,.14);
   backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
   border-radius:30px;
   padding:36px 28px 44px;
   box-shadow:0 40px 100px rgba(0,0,0,.55);
@@ -67,8 +70,15 @@ input,button{
   width:100%;border:none;border-radius:18px;
   padding:15px;font-size:16px;text-align:center;
 }
-input{margin-top:18px}
-button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
+input{
+  margin-top:18px;
+  outline:none;
+  -webkit-appearance:none;
+}
+button{
+  margin-top:16px;
+  font-weight:800;background:#fff;color:#7a002a;
+}
 .final{white-space:pre-line;font-size:15px;line-height:1.95}
 
 /* PHOTO */
@@ -78,21 +88,19 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
   width:min(480px,92vw);
   opacity:0;z-index:5;
   transition:opacity 1.2s ease;
+  pointer-events:none;            /* ✅ KRİTİK: görünmezken asla tıklama yeme */
 }
-.photo.show{opacity:1}
+.photo.show{
+  opacity:1;
+}
 .photo img{
   width:100%;
   border-radius:26px;
   box-shadow:0 40px 120px rgba(0,0,0,.55);
   transition:filter 1.2s ease, transform 1.2s ease;
 }
-.photo img.blurred{
-  filter:blur(16px) brightness(.88);
-}
-.photo img.clear{
-  filter:blur(0) brightness(1);
-  transform:scale(1.02);
-}
+.photo img.blurred{ filter:blur(16px) brightness(.88); }
+.photo img.clear{ filter:blur(0) brightness(1); transform:scale(1.02); }
 
 /* BOTTOM QUESTION BAR */
 .sheet{
@@ -103,15 +111,18 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
   width:min(520px,92vw);
   z-index:6;
   opacity:0;
-  transition:.7s cubic-bezier(.2,.9,.2,1);
+  transition:transform .7s cubic-bezier(.2,.9,.2,1), opacity .7s ease;
+  pointer-events:none;
 }
 .sheet.show{
   transform:translateX(-50%) translateY(0);
   opacity:1;
+  pointer-events:auto;
 }
 .sheetInner{
   background:rgba(255,255,255,.18);
   backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
   border-radius:24px;
   padding:14px 16px 18px;
   text-align:center;
@@ -121,6 +132,7 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
 .sheetInner input{
   border-radius:18px;padding:14px;width:100%;
   border:none;font-size:16px;text-align:center;
+  outline:none;
 }
 
 /* FINAL PILL */
@@ -134,6 +146,7 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
   transition:opacity 1s ease;
   width:min(520px,92vw);
   display:flex;justify-content:center;
+  pointer-events:none;
 }
 .after.show{opacity:1}
 .after .pill{
@@ -141,9 +154,11 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
   border-radius:999px;
   background:rgba(255,255,255,.18);
   backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
   border:1px solid rgba(255,255,255,.18);
   box-shadow:0 18px 60px rgba(0,0,0,.45);
   font-size:14px;font-weight:700;
+  text-align:center;
 }
 </style>
 </head>
@@ -158,19 +173,19 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
     <h1>🤍</h1>
     <p>Bu sayfayı açtıysan…<br>demek ki tam şu anda aklımdasın.</p>
     <div class="highlight">Evlendiğimiz tarihi yazmanı istiyorum</div>
-    <input id="d1" placeholder="GGAAYYYY">
-    <button onclick="first()">Devam et</button>
+    <input id="d1" placeholder="GGAAYYYY" inputmode="numeric" autocomplete="off">
+    <button id="b1">Devam et</button>
   </div>
 </div>
 
 <div class="photo" id="photo">
-  <img id="photoImg" src="IMG_6603_Original.jpeg" class="blurred">
+  <img id="photoImg" src="IMG_6603_Original.jpeg" class="blurred" alt="🤍">
 </div>
 
 <div class="sheet" id="sheet">
   <div class="sheetInner">
     <b>İlk arabana ne isim vermiştik?</b>
-    <input id="d2">
+    <input id="d2" autocomplete="off">
   </div>
 </div>
 
@@ -181,7 +196,7 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
 <script>
 const DATE="15052022";
 const CAR="poloş";
-const PHOTO_DELAY=6000;
+const PHOTO_DELAY=6000; // yazı bitince foto kaç ms sonra?
 
 const LINES=[
 "Bugün 14 Şubat…","",
@@ -197,21 +212,39 @@ const LINES=[
 "Hatırlıyor musun?"
 ];
 
+const card=document.getElementById("card");
+const d1=document.getElementById("d1");
+const b1=document.getElementById("b1");
+const photo=document.getElementById("photo");
+const photoImg=document.getElementById("photoImg");
+const sheet=document.getElementById("sheet");
+const d2=document.getElementById("d2");
+const after=document.getElementById("after");
+
+b1.addEventListener("click", first);
+d1.addEventListener("keydown", (e)=>{ if(e.key==="Enter") first(); });
+
 function first(){
   if(d1.value.trim()!==DATE) return;
+
   card.classList.add("fade");
   setTimeout(()=>{
     card.innerHTML='<h1>🤍</h1><div class="final" id="final"></div>';
+    const final=document.getElementById("final");
     type(final,LINES,22,()=>{
       setTimeout(()=>{
+        // foto görünsün ama dokunmayı ancak görünürken açmak istersen:
         photo.classList.add("show");
+        // İstersen foto üstüne tıklanabilsin:
+        photo.style.pointerEvents="auto";
+        // alt soru barı gelsin
         setTimeout(()=>sheet.classList.add("show"),800);
       },PHOTO_DELAY);
     });
   },600);
 }
 
-d2.addEventListener("input",()=>{
+d2.addEventListener("input", ()=>{
   if(d2.value.trim().toLowerCase()===CAR){
     sheet.classList.remove("show");
     photoImg.classList.remove("blurred");
@@ -225,7 +258,7 @@ function type(el,arr,s,done){
   let i=0,j=0;
   (function t(){
     if(i>=arr.length){done();return;}
-    let l=arr[i];
+    const l=arr[i];
     if(l===""&&j===0){el.textContent+="\n";i++;return setTimeout(t,140);}
     el.textContent+=l[j]||"";j++;
     if(j>=l.length){el.textContent+="\n";i++;j=0;return setTimeout(t,220);}
@@ -235,8 +268,8 @@ function type(el,arr,s,done){
 
 /* HEARTS */
 const canvas=document.getElementById("c"),ctx=canvas.getContext("2d");
-let w,h;function r(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
-r();addEventListener("resize",r);
+let w,h;function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;}
+resize();addEventListener("resize",resize);
 let hs=[];
 function spawn(){hs.push({x:Math.random()*w,y:h+30,s:12+Math.random()*20,v:.5+Math.random(),a:.3+Math.random()*.4})}
 function draw(x,y,s){
