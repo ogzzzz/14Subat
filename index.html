@@ -6,52 +6,65 @@
 <title>🤍</title>
 
 <style>
+:root{
+  --bg1:#2a0010; --bg2:#7a002a; --bg3:#b1003a;
+  --glass:rgba(255,255,255,.14);
+  --glass2:rgba(255,255,255,.18);
+  --ink:#fff; --accent:#7a002a;
+}
 *{box-sizing:border-box}
+
 html,body{
   margin:0;width:100%;height:100%;overflow:hidden;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
-  background:#120007;color:#fff;
+  background:#120007;color:var(--ink);
 }
 
-/* BACKGROUND */
+/* Background */
 .bg{
-  position:fixed;inset:-40px;z-index:0;
+  position:fixed; inset:-40px; z-index:0;
   background:
     radial-gradient(900px 600px at 20% 20%, rgba(255,255,255,.10), transparent 60%),
     radial-gradient(900px 700px at 80% 30%, rgba(255,255,255,.08), transparent 60%),
-    linear-gradient(120deg,#2a0010,#7a002a,#b1003a,#7a002a);
+    linear-gradient(120deg,var(--bg1),var(--bg2),var(--bg3),var(--bg2));
   background-size:260% 260%;
-  animation:bg 18s ease-in-out infinite;
+  animation:bgMove 18s ease-in-out infinite;
+  pointer-events:none;
 }
-@keyframes bg{
+@keyframes bgMove{
   0%{background-position:10% 20%}
   50%{background-position:90% 70%}
   100%{background-position:10% 20%}
 }
 .vignette{
-  position:fixed;inset:0;z-index:1;
-  background:radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,.65) 100%);
+  position:fixed; inset:0; z-index:1;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255,255,255,.06), transparent 55%),
+    radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,.6) 100%);
+  pointer-events:none;
 }
 
-/* HEARTS */
+/* Hearts */
 canvas{position:fixed;inset:0;z-index:2;pointer-events:none}
 
-/* CARD */
+/* Center card */
 .stage{
-  position:fixed;inset:0;z-index:4;
-  display:flex;align-items:center;justify-content:center;
+  position:fixed; inset:0; z-index:4;
+  display:flex; align-items:center; justify-content:center;
   padding:16px;
 }
 .card{
-  width:100%;max-width:460px;
-  background:rgba(255,255,255,.14);
-  backdrop-filter:blur(18px);
+  width:100%; max-width:460px;
+  background:var(--glass);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
   border-radius:30px;
   padding:36px 28px 44px;
   box-shadow:0 40px 100px rgba(0,0,0,.55);
   text-align:center;
+  animation:enter .8s ease;
 }
-.card.fade{animation:fade .6s ease forwards}
+@keyframes enter{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+.card.fadeOut{animation:fade .6s ease forwards}
 @keyframes fade{to{opacity:0;transform:scale(.96);filter:blur(6px)}}
 
 h1{margin:0 0 14px;font-size:20px}
@@ -60,79 +73,105 @@ p{margin:0;font-size:14px;line-height:1.8}
   margin:18px 0 10px;
   padding:12px 14px;
   border-radius:16px;
-  background:#fff;color:#7a002a;
+  background:#fff; color:var(--accent);
   font-weight:800;
 }
 input,button{
-  width:100%;border:none;border-radius:18px;
-  padding:15px;font-size:16px;text-align:center;
+  width:100%; border:none; border-radius:18px;
+  padding:15px; font-size:16px; text-align:center;
 }
-input{margin-top:18px}
-button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
+input{margin-top:18px; outline:none}
+button{margin-top:16px; font-weight:800; background:#fff; color:var(--accent)}
 
-.final{white-space:pre-line;font-size:15px;line-height:1.95}
+.final{white-space:pre-line; font-size:15px; line-height:1.95}
 
-/* PHOTO */
+/* Photo */
 .photo{
-  position:fixed;left:50%;top:50%;
-  transform:translate(-50%,-50%);
+  position:fixed; left:50%; top:50%;
+  transform:translate(-50%,-50%) translateY(18px);
   width:min(480px,92vw);
-  opacity:0;z-index:5;
-  transition:opacity 1.2s ease;
+  opacity:0; z-index:5;
+  transition:opacity 1.2s ease, transform 1.2s ease;
+  pointer-events:none;
 }
-.photo.show{opacity:1}
+.photo.show{
+  opacity:1;
+  transform:translate(-50%,-50%) translateY(0);
+}
 .photo img{
-  width:100%;border-radius:26px;
+  width:100%;
+  display:block;
+  border-radius:26px;
   box-shadow:0 40px 120px rgba(0,0,0,.55);
-  transition:filter 1.2s ease, transform 1.2s ease;
-}
-.photo img.blurred{
-  filter:blur(12px) brightness(.9);
-}
-.photo img.clear{
-  filter:blur(0) brightness(1);
-  transform:scale(1.02);
 }
 
-/* BOTTOM SHEET */
+/* Premium: photo “netleşme” */
+.photo img.soft{ filter: blur(2.5px) saturate(.95); transition:filter 1.0s ease; }
+.photo img.sharp{ filter: blur(0) saturate(1); }
+
+/* Bottom sheet (2nd lock) */
 .sheet{
   position:fixed;
   left:50%;
-  bottom:env(safe-area-inset-bottom,20px);
+  bottom: max(14px, env(safe-area-inset-bottom));
   transform:translateX(-50%) translateY(120%);
   width:min(520px,92vw);
   z-index:6;
   opacity:0;
-  transition:.7s cubic-bezier(.2,.9,.2,1);
+  transition:transform .7s cubic-bezier(.2,.9,.2,1), opacity .7s ease;
+  pointer-events:none;
 }
 .sheet.show{
   transform:translateX(-50%) translateY(0);
   opacity:1;
+  pointer-events:auto;
 }
 .sheetInner{
-  background:rgba(255,255,255,.18);
+  background:var(--glass2);
   backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
   border-radius:24px;
-  padding:14px 16px 18px;
+  box-shadow:0 30px 90px rgba(0,0,0,.45);
+  padding:14px 14px 16px;
+}
+.sheetTitle{
+  font-weight:800;
+  color:#fff;
+  text-align:center;
+  margin:6px 0 12px;
+}
+.sheetInput{
+  width:100%;
+  border:none;
+  border-radius:18px;
+  padding:14px;
+  font-size:16px;
+  text-align:center;
+  outline:none;
+}
+.sheetHint{
+  margin-top:10px;
+  font-size:12px;
+  opacity:.75;
   text-align:center;
 }
-.sheetInner b{display:block;margin-bottom:10px}
-.sheetInner input{
-  border-radius:18px;padding:14px;width:100%;
-  border:none;font-size:16px;text-align:center;
-}
 
-/* FINAL LINE */
+/* Final line after 2nd unlock */
 .after{
   position:fixed;
-  left:50%;top:calc(50% + 38vh);
+  left:50%;
+  top: calc(50% + min(280px, 34vh));
   transform:translateX(-50%);
+  width:min(480px,86vw);
   z-index:7;
   opacity:0;
-  transition:opacity 1s ease;
+  transition:opacity 1.0s ease;
+  text-align:center;
   font-size:14px;
+  line-height:1.8;
+  pointer-events:none;
 }
-.after.show{opacity:1}
+.after.show{ opacity:1; }
 </style>
 </head>
 
@@ -146,19 +185,21 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
     <h1>🤍</h1>
     <p>Bu sayfayı açtıysan…<br>demek ki tam şu anda aklımdasın.</p>
     <div class="highlight">Evlendiğimiz tarihi yazmanı istiyorum</div>
-    <input id="d1" placeholder="GGAAYYYY">
-    <button onclick="first()">Devam et</button>
+    <input id="d1" placeholder="GGAAYYYY" inputmode="numeric" autocomplete="off">
+    <button id="b1">Devam et</button>
   </div>
 </div>
 
 <div class="photo" id="photo">
-  <img id="photoImg" src="IMG_6603_Original.jpeg" class="blurred">
+  <img id="photoImg" class="soft" src="IMG_6603_Original.jpeg" alt="🤍">
 </div>
 
+<!-- 2nd lock bottom sheet -->
 <div class="sheet" id="sheet">
   <div class="sheetInner">
-    <b>İlk arabana ne isim vermiştik?</b>
-    <input id="d2">
+    <div class="sheetTitle">İlk arabana ne isim vermiştik?</div>
+    <input id="d2" class="sheetInput" autocomplete="off" />
+    <div class="sheetHint">Sadece bir kelime.</div>
   </div>
 </div>
 
@@ -167,7 +208,8 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
 <script>
 const DATE="15052022";
 const CAR="poloş";
-const PHOTO_DELAY=6000;
+const PHOTO_DELAY_MS = 6000;   // yazı bitince foto kaç ms sonra?
+const SHEET_DELAY_MS = 900;    // foto çıktıktan kaç ms sonra 2. kilit gelsin?
 
 const LINES=[
 "Bugün 14 Şubat…","",
@@ -183,47 +225,75 @@ const LINES=[
 "Hatırlıyor musun?"
 ];
 
+const card = document.getElementById("card");
+const photo = document.getElementById("photo");
+const photoImg = document.getElementById("photoImg");
+const sheet = document.getElementById("sheet");
+const after = document.getElementById("after");
+
+document.getElementById("b1").addEventListener("click", first);
+document.getElementById("d1").addEventListener("keydown",(e)=>{ if(e.key==="Enter") first(); });
+
 function first(){
-  if(d1.value.trim()!==DATE) return;
-  card.classList.add("fade");
+  if(document.getElementById("d1").value.trim() !== DATE) return;
+
+  card.classList.add("fadeOut");
   setTimeout(()=>{
-    card.innerHTML='<h1>🤍</h1><div class="final" id="final"></div>';
-    type(final,LINES,22,()=>{
+    card.classList.remove("fadeOut");
+    card.innerHTML = '<h1>🤍</h1><div class="final" id="final"></div>';
+    typeLines(document.getElementById("final"), LINES, 22, () => {
       setTimeout(()=>{
         photo.classList.add("show");
-        setTimeout(()=>sheet.classList.add("show"),800);
-      },PHOTO_DELAY);
+        photo.getBoundingClientRect(); // iOS repaint
+        // foto geldikten sonra alt sheet gelsin
+        setTimeout(()=> sheet.classList.add("show"), SHEET_DELAY_MS);
+      }, PHOTO_DELAY_MS);
     });
-  },600);
+  }, 650);
 }
 
-d2.addEventListener("input",()=>{
-  if(d2.value.trim().toLowerCase()===CAR){
+// 2nd lock
+document.getElementById("d2").addEventListener("input", ()=>{
+  const v = document.getElementById("d2").value.trim().toLowerCase();
+  if(v === CAR){
+    // sheet kapan
     sheet.classList.remove("show");
-    photoImg.classList.remove("blurred");
-    photoImg.classList.add("clear");
-    setTimeout(()=>after.classList.add("show"),600);
+    // foto netleşsin
+    photoImg.classList.remove("soft");
+    photoImg.classList.add("sharp");
+    // final cümle gelsin
+    setTimeout(()=> after.classList.add("show"), 650);
   }
 });
 
-function type(el,arr,s,done){
-  let i=0,j=0;
+// typewriter
+function typeLines(el, lines, speed, done){
+  let i=0, j=0;
   (function t(){
-    if(i>=arr.length){done();return;}
-    let l=arr[i];
-    if(l===""&&j===0){el.textContent+="\n";i++;return setTimeout(t,140);}
-    el.textContent+=l[j]||"";j++;
-    if(j>=l.length){el.textContent+="\n";i++;j=0;return setTimeout(t,220);}
-    setTimeout(t,s);
+    if(i >= lines.length){ done && done(); return; }
+    const line = lines[i];
+    if(line === "" && j===0){
+      el.textContent += "\n";
+      i++; j=0;
+      return setTimeout(t, 140);
+    }
+    el.textContent += line[j] || "";
+    j++;
+    if(j >= line.length){
+      el.textContent += "\n";
+      i++; j=0;
+      return setTimeout(t, 240);
+    }
+    setTimeout(t, speed);
   })();
 }
 
-/* HEARTS */
+/* Hearts */
 const canvas=document.getElementById("c"),ctx=canvas.getContext("2d");
-let w,h;function r(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
-r();addEventListener("resize",r);
+let w,h; function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+resize(); addEventListener("resize",resize);
 let hs=[];
-function spawn(){hs.push({x:Math.random()*w,y:h+30,s:12+Math.random()*20,v:.5+Math.random(),a:.3+Math.random()*.4})}
+function spawn(){hs.push({x:Math.random()*w,y:h+30,s:12+Math.random()*20,v:.5+Math.random(),a:.28+Math.random()*.42,d:(Math.random()-.5)*.55})}
 function draw(x,y,s){
   ctx.beginPath();
   ctx.moveTo(x,y);
@@ -233,13 +303,14 @@ function draw(x,y,s){
 }
 (function loop(){
   ctx.clearRect(0,0,w,h);
-  if(Math.random()>.85)spawn();
+  if(Math.random()>.85) spawn();
   hs.forEach(o=>{
-    o.y-=o.v;
-    ctx.globalAlpha=o.a;ctx.fillStyle="#fff";
+    o.y -= o.v; o.x += o.d;
+    ctx.globalAlpha = o.a;
+    ctx.fillStyle = "#fff";
     draw(o.x,o.y,o.s);
   });
-  hs=hs.filter(o=>o.y>-80);
+  hs = hs.filter(o=>o.y>-90);
   requestAnimationFrame(loop);
 })();
 </script>
