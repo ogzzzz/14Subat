@@ -26,7 +26,7 @@ html,body{
   background:#120007;
 }
 
-/* BACKGROUND */
+/* BACKGROUND (dokunma yeme fix) */
 .bg{
   position:fixed; inset:-40px;
   background:
@@ -36,6 +36,7 @@ html,body{
   background-size:260% 260%;
   animation:bgMove 18s ease-in-out infinite;
   z-index:0;
+  pointer-events:none; /* ✅ */
 }
 @keyframes bgMove{
   0%{background-position:10% 20%}
@@ -50,6 +51,7 @@ html,body{
     radial-gradient(circle at 50% 75%, rgba(0,0,0,.4), transparent 55%),
     radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,.6) 100%);
   z-index:1;
+  pointer-events:none; /* ✅ kritik fix */
 }
 
 /* HEARTS */
@@ -115,6 +117,8 @@ input{
   border:none;
   font-size:16px;
   text-align:center;
+  outline:none;
+  -webkit-appearance:none;
 }
 
 button{
@@ -137,7 +141,7 @@ button{
   padding-bottom:20px;
 }
 
-/* PHOTO */
+/* PHOTO (gizliyken tıklama bloklamasın) */
 .photo{
   position:fixed;
   bottom:6vh;
@@ -147,15 +151,19 @@ button{
   opacity:0;
   transition:opacity 1.2s ease, transform 1.2s ease;
   z-index:5;
+
+  pointer-events:none; /* ✅ gizliyken asla dokunma yeme */
 }
 .photo.show{
   opacity:1;
   transform:translate(-50%,0);
+  pointer-events:auto; /* ✅ görünürken isterse dokunulabilir */
 }
 .photo img{
   width:100%;
   border-radius:22px;
   box-shadow:0 30px 80px rgba(0,0,0,.45);
+  display:block;
 }
 </style>
 </head>
@@ -171,13 +179,13 @@ button{
     <p>Bu sayfayı açtıysan…<br>demek ki tam şu anda aklımdasın.</p>
 
     <div class="highlight">Evlendiğimiz tarihi yazmanı istiyorum</div>
-    <input id="x" placeholder="GG.AA.YYYY">
-    <button onclick="go()">Devam et</button>
+    <input id="x" placeholder="GG.AA.YYYY" inputmode="numeric" autocomplete="off">
+    <button id="btn">Devam et</button>
   </div>
 </div>
 
 <div class="photo" id="photo">
-  <img src="IMG_6603_Original.jpeg">
+  <img src="IMG_6603_Original.jpeg" alt="🤍">
 </div>
 
 <script>
@@ -204,20 +212,30 @@ const LINES=[
 "Hatırlıyor musun?"
 ];
 
+document.getElementById("btn").addEventListener("click", go);
+document.getElementById("x").addEventListener("keydown", (e)=>{
+  if(e.key==="Enter") go();
+});
+
 function go(){
-  if(document.getElementById("x").value.trim()!==SECRET) return;
+  const v=document.getElementById("x").value.trim();
+  if(v!==SECRET){ return; }
+
   const card=document.getElementById("card");
   const photo=document.getElementById("photo");
 
-  card.classList.add("fadeOut");
+  photo.classList.remove("show");
 
+  card.classList.add("fadeOut");
   setTimeout(()=>{
     card.classList.remove("fadeOut");
     card.innerHTML='<h1>🤍</h1><div class="final" id="final"></div>';
+
     typeLines("final",LINES,24,()=>{
       setTimeout(()=>{
         photo.classList.add("show");
-        photo.getBoundingClientRect(); // iOS repaint fix
+        // iOS repaint
+        photo.getBoundingClientRect();
       },1200);
     });
   },650);
@@ -239,8 +257,8 @@ function typeLines(id,lines,speed,done){
 
 /* HEARTS */
 const canvas=document.getElementById("c"),ctx=canvas.getContext("2d");
-let w,h;function r(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;}
-r();addEventListener("resize",r);
+let w,h; function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;}
+resize(); addEventListener("resize",resize);
 let hearts=[];
 function spawn(){
   hearts.push({x:Math.random()*w,y:h+30,s:12+Math.random()*22,v:.5+Math.random(),a:.25+Math.random()*.4,d:(Math.random()-.5)*.6});
@@ -256,7 +274,7 @@ function draw(x,y,s){
   ctx.clearRect(0,0,w,h);
   if(Math.random()>.84)spawn();
   hearts.forEach(o=>{
-    o.y-=o.v;o.x+=o.d;
+    o.y-=o.v; o.x+=o.d;
     ctx.globalAlpha=o.a;
     ctx.fillStyle="#fff";
     draw(o.x,o.y,o.s);
