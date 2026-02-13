@@ -19,7 +19,6 @@ html,body{
   color:#fff;
 }
 
-/* uçan kalpler */
 canvas{
   position:fixed;
   inset:0;
@@ -27,7 +26,7 @@ canvas{
   z-index:1;
 }
 
-/* merkez kart */
+/* kart */
 .card{
   position:relative;
   z-index:2;
@@ -39,32 +38,41 @@ canvas{
   backdrop-filter: blur(18px);
   box-shadow:0 40px 100px rgba(0,0,0,.45);
   text-align:center;
-  animation:fade .8s ease;
 
   display:flex;
   flex-direction:column;
   align-items:center;
+
+  animation:fadeIn .8s ease;
+  transform-origin:center;
 }
 
-@keyframes fade{
-  from{opacity:0; transform:translateY(14px)}
-  to{opacity:1}
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(14px) scale(.98)}
+  to{opacity:1; transform:translateY(0) scale(1)}
 }
 
-h1{
-  margin:0 0 16px;
-  font-size:20px;
-  font-weight:700;
+.card.vanish{
+  animation:vanish .6s ease forwards;
 }
 
-p{
-  margin:0;
-  font-size:14px;
-  line-height:1.75;
-  opacity:.96;
+@keyframes vanish{
+  to{opacity:0; transform:translateY(-8px) scale(.96); filter:blur(6px)}
 }
 
-/* kritik yönlendirme */
+.flash{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  background: radial-gradient(circle at 50% 40%, rgba(255,255,255,.28), transparent 55%);
+  opacity:0;
+  transition:opacity .8s ease;
+  pointer-events:none;
+}
+
+h1{ margin:0 0 16px; font-size:20px; font-weight:700; }
+p{ margin:0; font-size:14px; line-height:1.75; opacity:.96; }
+
 .highlight{
   margin:18px 0 10px;
   padding:12px 14px;
@@ -99,11 +107,19 @@ button{
   font-size:16px;
   font-weight:700;
 }
+
+.final{
+  white-space:pre-line;
+  font-size:15px;
+  line-height:1.9;
+  opacity:.98;
+}
 </style>
 </head>
 
 <body>
 
+<div class="flash" id="flash"></div>
 <canvas id="c"></canvas>
 
 <div class="card" id="box">
@@ -119,7 +135,7 @@ button{
     Evlendiğimiz tarihi yazmanı istiyorum
   </div>
 
-  <input id="x" placeholder="GG.AA.YYYY">
+  <input id="x" placeholder="GG.AA.YYYY" inputmode="numeric">
   <button onclick="go()">Devam et</button>
 </div>
 
@@ -127,42 +143,85 @@ button{
 /* === AYAR === */
 const SECRET = "15.05.2022";
 
-const MESSAGE = `
-Bugün 14 Şubat…
-
-Ama benim için
-senin varlığın
-bir güne sığmıyor.
-
-Yanımdayken dünya daha sakin,
-yokken bile içimde bir yer
-“tamam” diyor.
-
-Seni sevmek,
-her gün yeniden seçmek gibi.
-Hiç zorlanmadan.
-Hiç tereddüt etmeden.
-
-İyi ki karımsın.
-İyi ki benim hayatımsın.
-
-🤍
-`;
+const LINES = [
+  "Bugün 14 Şubat…",
+  "",
+  "Ama benim için",
+  "senin varlığın",
+  "bir güne sığmıyor.",
+  "",
+  "Yanımdayken dünya daha sakin,",
+  "yokken bile içimde bir yer",
+  "“tamam” diyor.",
+  "",
+  "Seni sevmek,",
+  "her gün yeniden seçmek gibi.",
+  "Hiç zorlanmadan.",
+  "Hiç tereddüt etmeden.",
+  "",
+  "İyi ki karımsın.",
+  "İyi ki benim hayatımsın.",
+  "",
+  "🤍"
+];
 
 /* === AKIŞ === */
 function go(){
-  const v = document.getElementById("x").value.trim();
+  const inp = document.getElementById("x");
+  const v = inp.value.trim();
+
   if(v === SECRET){
-    document.getElementById("box").innerHTML =
-      `<h1>🤍</h1><p style="white-space:pre-line">${MESSAGE}</p>`;
-    burst(60);
+    try{ navigator.vibrate && navigator.vibrate([18,10,18]); }catch(e){}
+
+    const box = document.getElementById("box");
+    const flash = document.getElementById("flash");
+
+    box.classList.add("vanish");
+    flash.style.opacity = "1";
+    burst(90);
+
+    setTimeout(()=>{
+      flash.style.opacity = "0";
+      box.classList.remove("vanish");
+      box.innerHTML = `<h1>🤍</h1><div class="final" id="final"></div>`;
+      typeLines("final", LINES, 22);
+    }, 650);
+
   }else{
-    document.getElementById("x").value="";
-    document.getElementById("x").placeholder="Bir daha dene 🤍";
+    inp.value="";
+    inp.placeholder="Bir daha dene 🤍";
   }
 }
 
-/* === GERÇEK KALPLER ❤️ === */
+/* typewriter */
+function typeLines(id, lines, speed){
+  const el = document.getElementById(id);
+  let i=0, j=0;
+
+  function tick(){
+    if(i >= lines.length) return;
+    const line = lines[i];
+
+    if(line === "" && j===0){
+      el.textContent += "\n";
+      i++; j=0;
+      return setTimeout(tick, 120);
+    }
+
+    el.textContent += line[j] || "";
+    j++;
+
+    if(j >= line.length){
+      el.textContent += "\n";
+      i++; j=0;
+      return setTimeout(tick, 220);
+    }
+    setTimeout(tick, speed);
+  }
+  tick();
+}
+
+/* === KALPLER === */
 const canvas = document.getElementById("c");
 const ctx = canvas.getContext("2d");
 let w,h;
@@ -175,40 +234,45 @@ resize();
 addEventListener("resize",resize);
 
 let hearts=[];
-function spawn(){
+function spawn(extra=false){
+  const big = extra ? (Math.random()>0.65) : (Math.random()>0.9);
   hearts.push({
     x:Math.random()*w,
     y:h+30,
-    s:10+Math.random()*16,
-    v:0.6+Math.random()*1.2,
-    a:0.25+Math.random()*0.5
+    s:(big?18:10)+Math.random()*(big?18:14),
+    v:(big?0.45:0.65)+Math.random()*(big?0.9:1.25),
+    a:0.22+Math.random()*0.55,
+    drift:(Math.random()-0.5)*0.6
   });
 }
 
-function drawHeart(x, y, s){
+function drawHeart(x,y,s){
   ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.bezierCurveTo(x - s, y - s, x - s*1.5, y + s*0.5, x, y + s*1.4);
-  ctx.bezierCurveTo(x + s*1.5, y + s*0.5, x + s, y - s, x, y);
+  ctx.moveTo(x,y);
+  ctx.bezierCurveTo(x-s,y-s,x-s*1.5,y+s*0.5,x,y+s*1.4);
+  ctx.bezierCurveTo(x+s*1.5,y+s*0.5,x+s,y-s,x,y);
   ctx.fill();
 }
 
 function loop(){
   ctx.clearRect(0,0,w,h);
-  if(Math.random()>0.82) spawn();
+  if(Math.random()>0.82) spawn(false);
+
   hearts.forEach(o=>{
     o.y -= o.v;
+    o.x += o.drift;
     ctx.globalAlpha = o.a;
-    ctx.fillStyle = "#fff";
-    drawHeart(o.x, o.y, o.s);
+    ctx.fillStyle="#fff";
+    drawHeart(o.x,o.y,o.s);
   });
-  hearts = hearts.filter(o=>o.y>-60);
+
+  hearts = hearts.filter(o=>o.y>-70 && o.x>-80 && o.x<w+80);
   requestAnimationFrame(loop);
 }
 loop();
 
 function burst(n){
-  for(let i=0;i<n;i++) spawn();
+  for(let i=0;i<n;i++) spawn(true);
 }
 </script>
 
