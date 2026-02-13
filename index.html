@@ -179,7 +179,7 @@ button{
     <p>Bu sayfayı açtıysan…<br>demek ki tam şu anda aklımdasın.</p>
 
     <div class="highlight">Evlendiğimiz tarihi yazmanı istiyorum</div>
-    <input id="x" placeholder="GG.AA.YYYY" inputmode="numeric" autocomplete="off">
+    <input id="x" placeholder="GGAAYYYY" inputmode="numeric" autocomplete="off">
     <button id="btn">Devam et</button>
   </div>
 </div>
@@ -189,7 +189,7 @@ button{
 </div>
 
 <script>
-const SECRET="15.05.2022";
+const SECRET="15052022";
 const LINES=[
 "Bugün 14 Şubat…",
 "",
@@ -235,7 +235,7 @@ function go(){
         photo.classList.add("show");
         // iOS repaint
         photo.getBoundingClientRect();
-      },1200);
+      },6000);
     });
   },650);
 }
@@ -284,4 +284,5 @@ function draw(x,y,s){
 </script>
 </body>
 </html>
+
 
