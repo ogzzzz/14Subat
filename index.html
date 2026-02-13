@@ -36,7 +36,7 @@ html,body{
 /* HEARTS */
 canvas{position:fixed;inset:0;z-index:2;pointer-events:none}
 
-/* CARD */
+/* CENTER CARD */
 .stage{
   position:fixed;inset:0;z-index:4;
   display:flex;align-items:center;justify-content:center;
@@ -69,7 +69,6 @@ input,button{
 }
 input{margin-top:18px}
 button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
-
 .final{white-space:pre-line;font-size:15px;line-height:1.95}
 
 /* PHOTO */
@@ -82,24 +81,25 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
 }
 .photo.show{opacity:1}
 .photo img{
-  width:100%;border-radius:26px;
+  width:100%;
+  border-radius:26px;
   box-shadow:0 40px 120px rgba(0,0,0,.55);
   transition:filter 1.2s ease, transform 1.2s ease;
 }
 .photo img.blurred{
-  filter:blur(20px) brightness(.9);
+  filter:blur(16px) brightness(.88);
 }
 .photo img.clear{
   filter:blur(0) brightness(1);
   transform:scale(1.02);
 }
 
-/* BOTTOM SHEET */
+/* BOTTOM QUESTION BAR */
 .sheet{
   position:fixed;
   left:50%;
-  bottom:env(safe-area-inset-bottom,20px);
-  transform:translateX(-50%) translateY(120%);
+  bottom:calc(env(safe-area-inset-bottom) + 16px);
+  transform:translateX(-50%) translateY(140%);
   width:min(520px,92vw);
   z-index:6;
   opacity:0;
@@ -115,6 +115,7 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
   border-radius:24px;
   padding:14px 16px 18px;
   text-align:center;
+  box-shadow:0 30px 90px rgba(0,0,0,.45);
 }
 .sheetInner b{display:block;margin-bottom:10px}
 .sheetInner input{
@@ -122,17 +123,28 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
   border:none;font-size:16px;text-align:center;
 }
 
-/* FINAL LINE */
+/* FINAL PILL */
 .after{
   position:fixed;
-  left:50%;top:calc(50% + 38vh);
+  left:50%;
+  bottom:calc(env(safe-area-inset-bottom) + 18px);
   transform:translateX(-50%);
   z-index:7;
   opacity:0;
   transition:opacity 1s ease;
-  font-size:14px;
+  width:min(520px,92vw);
+  display:flex;justify-content:center;
 }
 .after.show{opacity:1}
+.after .pill{
+  padding:12px 18px;
+  border-radius:999px;
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 18px 60px rgba(0,0,0,.45);
+  font-size:14px;font-weight:700;
+}
 </style>
 </head>
 
@@ -162,7 +174,9 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
   </div>
 </div>
 
-<div class="after" id="after">Bunu bilen biriyle evlendim.</div>
+<div class="after" id="after">
+  <div class="pill">🤍 Bunu bilen biriyle evlendim.</div>
+</div>
 
 <script>
 const DATE="15052022";
@@ -206,6 +220,7 @@ d2.addEventListener("input",()=>{
   }
 });
 
+/* TYPEWRITER */
 function type(el,arr,s,done){
   let i=0,j=0;
   (function t(){
@@ -245,4 +260,3 @@ function draw(x,y,s){
 </script>
 </body>
 </html>
-
