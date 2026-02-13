@@ -86,12 +86,9 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
   box-shadow:0 40px 120px rgba(0,0,0,.55);
   transition:filter 1.2s ease, transform 1.2s ease;
 }
-
-/* 🔥 SADECE BURASI DEĞİŞTİ */
 .photo img.blurred{
-  filter:blur(18px) brightness(.85);
+  filter:blur(12px) brightness(.9);
 }
-
 .photo img.clear{
   filter:blur(0) brightness(1);
   transform:scale(1.02);
@@ -125,7 +122,7 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
   border:none;font-size:16px;text-align:center;
 }
 
-/* 🔥 SADECE BURASI DEĞİŞTİ */
+/* FINAL LINE */
 .after{
   position:fixed;
   left:50%;top:calc(50% + 38vh);
@@ -133,17 +130,7 @@ button{margin-top:16px;font-weight:800;background:#fff;color:#7a002a}
   z-index:7;
   opacity:0;
   transition:opacity 1s ease;
-
-  padding:14px 22px;
-  border-radius:999px;
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 18px 60px rgba(0,0,0,.45);
-
-  font-size:15px;
-  font-weight:700;
+  font-size:14px;
 }
 .after.show{opacity:1}
 </style>
@@ -230,6 +217,31 @@ function type(el,arr,s,done){
     setTimeout(t,s);
   })();
 }
+
+/* HEARTS */
+const canvas=document.getElementById("c"),ctx=canvas.getContext("2d");
+let w,h;function r(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+r();addEventListener("resize",r);
+let hs=[];
+function spawn(){hs.push({x:Math.random()*w,y:h+30,s:12+Math.random()*20,v:.5+Math.random(),a:.3+Math.random()*.4})}
+function draw(x,y,s){
+  ctx.beginPath();
+  ctx.moveTo(x,y);
+  ctx.bezierCurveTo(x-s,y-s,x-s*1.5,y+s*.5,x,y+s*1.4);
+  ctx.bezierCurveTo(x+s*1.5,y+s*.5,x+s,y-s,x,y);
+  ctx.fill();
+}
+(function loop(){
+  ctx.clearRect(0,0,w,h);
+  if(Math.random()>.85)spawn();
+  hs.forEach(o=>{
+    o.y-=o.v;
+    ctx.globalAlpha=o.a;ctx.fillStyle="#fff";
+    draw(o.x,o.y,o.s);
+  });
+  hs=hs.filter(o=>o.y>-80);
+  requestAnimationFrame(loop);
+})();
 </script>
 </body>
 </html>
