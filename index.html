@@ -8,7 +8,6 @@
 <style>
 html,body{
   margin:0;
-  padding:0;
   width:100%;
   height:100%;
   overflow:hidden;
@@ -20,15 +19,12 @@ html,body{
   color:#fff;
 }
 
-/* floating hearts */
 canvas{
   position:fixed;
   inset:0;
   pointer-events:none;
-  z-index:1;
 }
 
-/* center card */
 .card{
   position:relative;
   z-index:2;
@@ -45,7 +41,7 @@ canvas{
 
 @keyframes fade{
   from{opacity:0; transform:translateY(12px)}
-  to{opacity:1; transform:none}
+  to{opacity:1}
 }
 
 h1{
@@ -107,7 +103,6 @@ button{
 </div>
 
 <script>
-/* ====== SADECE BURAYI DEĞİŞTİR ====== */
 const SECRET = "1402";
 
 const MESSAGE = `
@@ -132,7 +127,6 @@ Hiç tereddüt etmeden.
 🤍
 `;
 
-/* ====== AKIŞ ====== */
 function go(){
   const v = document.getElementById("x").value.trim();
   if(v === SECRET){
@@ -145,7 +139,7 @@ function go(){
   }
 }
 
-/* ====== UÇAN KALPLER ====== */
+/* floating hearts */
 const canvas = document.getElementById("c");
 const ctx = canvas.getContext("2d");
 let w,h;
