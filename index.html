@@ -33,7 +33,7 @@ canvas{
   z-index:2;
   max-width:440px;
   margin:12vh auto;
-  padding:34px 28px;
+  padding:34px 28px 38px;
   border-radius:28px;
   background:rgba(255,255,255,.16);
   backdrop-filter: blur(18px);
@@ -60,9 +60,20 @@ p{
   opacity:.96;
 }
 
+/* 👇 KRİTİK SATIR */
+.highlight{
+  margin:18px auto 10px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:rgba(255,255,255,.85);
+  color:#7a002a;
+  font-size:15px;
+  font-weight:700;
+}
+
 input{
   width:100%;
-  margin-top:24px;
+  margin-top:20px;
   padding:15px;
   border-radius:18px;
   border:none;
@@ -91,25 +102,24 @@ button{
 
 <div class="card" id="box">
   <h1>🤍</h1>
+
   <p>
     Bu sayfayı açtıysan…  
     demek ki tam şu anda  
     aklımdasın.
-    <br><br>
-    Devamı için  
-    <b>ilk tanıştığımız günü</b>  
-    yazmanı istiyorum.
   </p>
+
+  <div class="highlight">
+    Evlendiğimiz günü yazmanı istiyorum
+  </div>
 
   <input id="x" placeholder="GG.AA.YYYY">
   <button onclick="go()">Devam et</button>
 </div>
 
 <script>
-/* ===================== */
-/*  SADECE BURAYI AYARLA */
-/* ===================== */
-const SECRET = "14.02.2018"; // ilk tanışma tarihi
+/* ==== AYAR ==== */
+const SECRET = "15.05.2022";
 
 const MESSAGE = `
 Bugün 14 Şubat…
@@ -133,9 +143,7 @@ Hiç tereddüt etmeden.
 🤍
 `;
 
-/* ===================== */
-/*        AKIŞ           */
-/* ===================== */
+/* ==== AKIŞ ==== */
 function go(){
   const v = document.getElementById("x").value.trim();
   if(v === SECRET){
@@ -148,9 +156,7 @@ function go(){
   }
 }
 
-/* ===================== */
-/*   GERÇEK KALPLER ❤️   */
-/* ===================== */
+/* ==== KALPLER ==== */
 const canvas = document.getElementById("c");
 const ctx = canvas.getContext("2d");
 let w,h;
